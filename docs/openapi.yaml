@@ -1,0 +1,66 @@
+openapi: 3.0.0
+info:
+  title: CDN
+  version: 0.1.0
+  license:
+    name: MIT
+
+paths:
+  /:
+    post:
+      summary: Upload a file
+      operationId: file-upload
+      tags:
+        - Files
+      responses:
+        '201':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /{fileId}:
+    get:
+      summary: File
+      operationId: user
+      tags:
+        - Files
+      parameters:
+        - name: fileId
+          in: path
+          required: true
+          description: The id of the file to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Binary file
+
+components:
+  schemas:
+    File:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        created_at:
+          type: string
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        message:
+          type: string
