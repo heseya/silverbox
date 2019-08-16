@@ -17,7 +17,6 @@ class UploadController extends Controller
         $files = [];
 
         foreach ($request->allFiles() as $uploaded) {
-
             $file = $request->client->files()->save(new File());
 
             // Save file

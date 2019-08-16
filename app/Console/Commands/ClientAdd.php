@@ -39,7 +39,7 @@ class ClientAdd extends Command
     public function handle()
     {
         $client = Client::create();
-        
+
         if (! empty($this->argument('name'))) {
             $client->update(['name' => $this->argument('name')]);
         }
