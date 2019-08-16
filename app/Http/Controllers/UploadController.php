@@ -20,7 +20,7 @@ class UploadController extends Controller
             $file = $request->client->files()->save(new File());
 
             // Save file
-            $uploaded->move(storage_path(env('STORAGE_NAME', 'cdn')), $file->id);
+            $uploaded->move(storage_path('app'), $file->id);
 
             $files[] = $file;
         }

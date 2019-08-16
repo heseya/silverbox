@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Console\Command;
 
 class Clear extends Command
@@ -41,13 +42,10 @@ class Clear extends Command
         $start = microtime(true);
         $count = 0;
 
-        $path = storage_path(env('STORAGE_NAME', 'cdn'));
-        $files = scandir($path);
-
-        foreach ($files as $file) {
-            if (! preg_match('/\..*/', $file) && empty(File::find($file))) {
+        foreach (Storage::files() as $file) {
+            if (empty(File::find($file))) {
                 $count++;
-                unlink($path . '/' . $file);
+                Storage::delete($file);
             }
         }
 
