@@ -1,13 +1,12 @@
 {
-    "name": "laravel/lumen",
-    "description": "The Laravel Lumen Framework.",
-    "keywords": ["framework", "laravel", "lumen"],
+    "name": "bvlinsky/cdn",
+    "description": "Simple CDN powered by Lumen.",
+    "keywords": ["cdn", "php", "lumen"],
     "license": "MIT",
     "type": "project",
     "require": {
         "php": ">=7.1.3",
-        "laravel/lumen-framework": "5.8.*",
-        "league/flysystem": " ~1.0"
+        "laravel/lumen-framework": "5.8.*"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
