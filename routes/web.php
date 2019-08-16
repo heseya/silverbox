@@ -10,6 +10,10 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
+
 $router->get('/', 'Controller@info');
-$router->post('/', 'UploadController@upload');
 $router->get('/{file}', 'ViewController@view');
+
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->post('/', 'UploadController@upload');
+});

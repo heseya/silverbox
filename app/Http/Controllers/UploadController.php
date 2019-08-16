@@ -18,7 +18,7 @@ class UploadController extends Controller
 
         foreach ($request->allFiles() as $uploaded) {
 
-            $file = File::create();
+            $file = $request->client->files()->save(new File());
 
             // Save file
             $uploaded->move(storage_path(env('STORAGE_NAME', 'cdn')), $file->id);
