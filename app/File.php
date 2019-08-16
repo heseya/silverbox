@@ -22,7 +22,7 @@ class File extends Model
 
     public function path()
     {
-        return storage_path(env('STORAGE_NAME', 'cdn') . '/' . $this->id);
+        return storage_path('app/' . $this->id);
     }
 
     public function owner()

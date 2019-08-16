@@ -16,15 +16,4 @@ class Kernel extends ConsoleKernel
         Commands\Clear::class,
         Commands\ClientAdd::class,
     ];
-
-    /**
-     * Define the application's command schedule.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-     * @return void
-     */
-    protected function schedule(Schedule $schedule)
-    {
-        //
-    }
 }
