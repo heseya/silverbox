@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\File;
+use Illuminate\Http\Request;
 
 class ViewController extends Controller
 {
@@ -12,7 +12,9 @@ class ViewController extends Controller
         $file = File::find($fileId);
 
         // File not found
-        if(empty($file)) return response()->json(['message' => 'not found'], 404);
+        if(empty($file)) {
+            return response()->json(['message' => 'not found'], 404);
+        }
 
         return response(file_get_contents($file->path()))
                 ->header('Content-Type', mime_content_type($file->path()));

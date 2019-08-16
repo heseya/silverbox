@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\File;
+use Illuminate\Http\Request;
 
 class UploadController extends Controller
 {
     /**
-     * Files upload
+     * Files upload.
      *
      * @return Response
      */
