@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 
 class Clear extends Command
 {
