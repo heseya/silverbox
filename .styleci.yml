@@ -1,9 +1,6 @@
-php:
-  preset: laravel
-  disabled:
-    - unused_use
-js: false
-ts: false
-css: false
-vue: false
-py: false
+preset: laravel
+disabled:
+  - unused_use
+  - concat_without_spaces
+enabled:
+  - concat_with_spaces

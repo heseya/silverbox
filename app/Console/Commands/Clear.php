@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\File;
+use Illuminate\Console\Command;
 
 class Clear extends Command
 {
@@ -44,9 +44,8 @@ class Clear extends Command
         $path = storage_path(env('STORAGE_NAME', 'cdn'));
         $files = scandir($path);
 
-        foreach($files as $file) {
-            
-            if(!preg_match('/\..*/', $file) && empty(File::find($file))) {
+        foreach ($files as $file) {
+            if (! preg_match('/\..*/', $file) && empty(File::find($file))) {
                 $count++;
                 unlink($path . '/' . $file);
             }
