@@ -2,3 +2,8 @@ php:
   preset: laravel
   disabled:
     - unused_use
+js: false
+ts: false
+css: false
+vue: false
+py: false
