@@ -12,7 +12,7 @@ class ViewController extends Controller
         $file = File::find($fileId);
 
         // File not found
-        if(empty($file)) {
+        if (empty($file)) {
             return response()->json(['message' => 'not found'], 404);
         }
 

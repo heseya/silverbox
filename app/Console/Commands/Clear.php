@@ -51,6 +51,6 @@ class Clear extends Command
             }
         }
 
-        echo 'Removed ' . $count . ' files in ' . round((microtime(true) - $start), 2) . " seconds\n";
+        $this->line('<fg=green>Removed ' . $count . ' files in ' . round((microtime(true) - $start), 2) . ' seconds');
     }
 }
