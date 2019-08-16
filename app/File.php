@@ -11,16 +11,23 @@ class File extends Model
 
     public $timestamps = false;
 
+    protected $hidden = ['client_id'];
+
     public function __construct()
     {
         do {
             $this->id = str_random(32);
-
+            
         } while (! empty(app('db')->select('SELECT `id` FROM files WHERE `id` = ?', [$this->id])));
     }
 
     public function path()
     {
         return storage_path(env('STORAGE_NAME', 'cdn') . '/' . $this->id);
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(Client::class);
     }
 }

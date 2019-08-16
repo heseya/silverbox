@@ -8,9 +8,13 @@ class Client extends Model
 {
     protected $fillable = ['name'];
 
-    public function __construct($name)
+    public function __construct()
     {
-        $this->name = $name;
-        $this->token = str_random(255);
+        $this->token = str_random(512);
+    }
+
+    public function files()
+    {
+        return $this->hasMany(File::class);
     }
 }

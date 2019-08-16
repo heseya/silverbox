@@ -12,7 +12,7 @@ class ClientAdd extends Command
      *
      * @var string
      */
-    protected $signature = 'clients:add {name}';
+    protected $signature = 'clients:add {name?}';
 
     /**
      * The console command description.
@@ -38,8 +38,11 @@ class ClientAdd extends Command
      */
     public function handle()
     {
-        $client = new Client($this->argument('name'));
-        $client->save();
+        $client = Client::create();
+        
+        if (! empty($this->argument('name'))) {
+            $client->update(['name' => $this->argument('name')]);
+        }
 
         $this->line('<fg=green>New client added!</>');
         $this->line('<fg=yellow>ID:</> ' . $client->id);
