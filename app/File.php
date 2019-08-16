@@ -16,7 +16,7 @@ class File extends Model
         do {
             $this->id = str_random(32);
 
-        } while (!empty(app('db')->select('SELECT `id` FROM files WHERE `id` = ?', [$this->id])));
+        } while (! empty(app('db')->select('SELECT `id` FROM files WHERE `id` = ?', [$this->id])));
     }
 
     public function path()
