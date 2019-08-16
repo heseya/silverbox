@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ViewController extends Controller
 {
