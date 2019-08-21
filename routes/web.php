@@ -16,4 +16,5 @@ $router->get('/{file}', 'ViewController@view');
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('/', 'UploadController@upload');
+    $router->delete('/{file}', 'DeleteController@delete');
 });

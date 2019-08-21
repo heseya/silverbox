@@ -5,8 +5,7 @@
 [![license](https://img.shields.io/github/license/bvlinsky/cdn?color=blue&style=flat-square)](https://github.com/bvlinsky/cdn/blob/master/LICENSE)
 
 ## Documentation
-- [OpenAPI](https://bump.sh/doc/cdn)
-
+-   [OpenAPI](https://bump.sh/doc/cdn)
 
 ## Commands
 Creating new client
