@@ -30,8 +30,8 @@ paths:
 
   /{fileId}:
     get:
-      summary: File
-      operationId: user
+      summary: Get a file
+      operationId: file-get
       tags:
         - Files
       parameters:
@@ -43,7 +43,23 @@ paths:
             type: string
       responses:
         '200':
-          description: Binary file
+          description: Binary file.
+
+    delete:
+      summary: Delete a file
+      operationId: file-delete
+      tags:
+        - Files
+      parameters:
+        - name: fileId
+          in: path
+          required: true
+          description: The id of the file to retrieve
+          schema:
+            type: string
+      responses:
+        '204':
+          description: File successfully deleted.
 
 components:
   schemas:
