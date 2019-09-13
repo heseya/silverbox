@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\Storage;
 
 class File
 {
-    public $id, $owner, $file;
+    public $id;
+    public $owner;
+    public $file;
 
-    function __construct($client, $file, $id = null)
+    public function __construct($client, $file, $id = null)
     {
         $this->owner = $client;
         $this->file = $file;
@@ -55,7 +57,7 @@ class File
         if (Storage::exists($client . DIRECTORY_SEPARATOR . $id)) {
             $file = Storage::get($client . DIRECTORY_SEPARATOR . $id);
 
-            return new File($client, $file, $id);
+            return new self($client, $file, $id);
         } else {
             return false;
         }
