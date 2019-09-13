@@ -38,14 +38,18 @@ class ClientAdd extends Command
      */
     public function handle()
     {
-        $client = Client::create();
+        if (empty($this->argument('name'))) {
+            $this->line('<fg=red>You must provide a name!</>');
+            die;
+        }
 
-        if (! empty($this->argument('name'))) {
-            $client->update(['name' => $this->argument('name')]);
+        $client = new Client($this->argument('name'));
+
+        if (! $client->save()) {
+            $this->line('<fg=red>Error!</>');
         }
 
         $this->line('<fg=green>New client added!</>');
-        $this->line('<fg=yellow>ID:</> ' . $client->id);
         $this->line('<fg=yellow>Name:</> ' . $client->name);
         $this->line('<fg=yellow>Token:</> ' . $client->token . "\n");
     }

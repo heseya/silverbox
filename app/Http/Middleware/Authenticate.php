@@ -16,9 +16,9 @@ class Authenticate
      */
     public function handle($request, Closure $next)
     {
-        $request->client = Client::where('token', $request->bearerToken())->first();
+        $request->client = Client::login($request->client, $request->bearerToken());
 
-        if (empty($request->client)) {
+        if (! $request->client) {
             return response()->json(['message' => 'unauthorized'], 401);
         }
 
