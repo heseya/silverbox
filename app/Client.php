@@ -2,19 +2,40 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
-class Client extends Model
+class Client
 {
-    protected $fillable = ['name'];
+    public $name, $token;
 
-    public function __construct()
+    public function __construct($name, $token = null)
     {
-        $this->token = str_random(512);
+        $this->name = $name;
+
+        if (is_null($token)) {
+            $this->token = $this->generateToken();
+        } else {
+            $this->token = $token;
+        }
     }
 
-    public function files()
+    private function generateToken() {
+        return Str::random(512);
+    }
+
+    public function save() {
+        return Storage::put($this->name . DIRECTORY_SEPARATOR . '.token', $this->token);
+    }
+
+    public static function login($name, $token)
     {
-        return $this->hasMany(File::class);
+        if (! Storage::exists($name . DIRECTORY_SEPARATOR . '.token')) {
+            return false;
+        } elseif (Storage::get($name . DIRECTORY_SEPARATOR . '.token') !== $token) {
+            return false;
+        } else {
+            return new Client($name, $token);
+        }
     }
 }

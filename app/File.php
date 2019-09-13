@@ -2,31 +2,62 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
-class File extends Model
+class File
 {
-    protected $primaryKey = 'id';
-    public $incrementing = false;
+    public $id, $owner, $file;
 
-    public $timestamps = false;
+    function __construct($client, $file, $id = null)
+    {
+        $this->owner = $client;
+        $this->file = $file;
 
-    protected $hidden = ['client_id'];
+        if (is_null($id)) {
+            $this->id = $this->generateId();
+        } else {
+            $this->id = $id;
+        }
+    }
 
-    public function __construct()
+    private function generateId()
     {
         do {
-            $this->id = str_random(32);
-        } while (! empty(app('db')->select('SELECT `id` FROM files WHERE `id` = ?', [$this->id])));
+            $id = Str::random(32);
+        } while (Storage::exists($this->owner . DIRECTORY_SEPARATOR . $id));
+
+        return $id;
     }
 
     public function path()
     {
-        return storage_path('app/' . $this->id);
+        return $this->owner . DIRECTORY_SEPARATOR . $this->id;
     }
 
-    public function owner()
+    public function contentType()
     {
-        return $this->belongsTo(Client::class);
+        return Storage::mimeType($this->path());
+    }
+
+    public function save()
+    {
+        return Storage::putFileAs($this->owner, $this->file, $this->id);
+    }
+
+    public function delete()
+    {
+        return Storage::delete($this->path());
+    }
+
+    public static function find($client, $id)
+    {
+        if (Storage::exists($client . DIRECTORY_SEPARATOR . $id)) {
+            $file = Storage::get($client . DIRECTORY_SEPARATOR . $id);
+
+            return new File($client, $file, $id);
+        } else {
+            return false;
+        }
     }
 }

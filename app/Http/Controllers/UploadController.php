@@ -14,17 +14,12 @@ class UploadController extends Controller
      */
     public function upload(Request $request)
     {
-        $files = [];
-
         foreach ($request->allFiles() as $uploaded) {
-            $file = $request->client->files()->save(new File());
-
-            // Save file
-            $uploaded->move(storage_path('app'), $file->id);
-
+            $file = new File($request->client->name, $uploaded);
+            $file->save();
             $files[] = $file;
         }
 
-        return response()->json($files, 201);
+        return response()->json($files ?? [], 201);
     }
 }
