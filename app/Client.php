@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Storage;
 
 class Client
 {
-    public $name, $token;
+    public $name;
+    public $token;
 
     public function __construct($name, $token = null)
     {
@@ -20,11 +21,13 @@ class Client
         }
     }
 
-    private function generateToken() {
+    private function generateToken()
+    {
         return Str::random(512);
     }
 
-    public function save() {
+    public function save()
+    {
         return Storage::put($this->name . DIRECTORY_SEPARATOR . '.token', $this->token);
     }
 
@@ -35,7 +38,7 @@ class Client
         } elseif (Storage::get($name . DIRECTORY_SEPARATOR . '.token') !== $token) {
             return false;
         } else {
-            return new Client($name, $token);
+            return new self($name, $token);
         }
     }
 }
