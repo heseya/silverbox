@@ -13,12 +13,7 @@ class Client
     public function __construct($name, $token = null)
     {
         $this->name = $name;
-
-        if ($token === null) {
-            $this->token = $this->generateToken();
-        } else {
-            $this->token = $token;
-        }
+        $this->token = $token ?? $this->generateToken();
     }
 
     private function generateToken()
