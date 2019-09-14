@@ -40,6 +40,7 @@ class ClientAdd extends Command
     {
         if (empty($this->argument('name'))) {
             $this->error('You must provide a name!');
+
             return;
         }
 
@@ -47,6 +48,7 @@ class ClientAdd extends Command
 
         if (! $client->save()) {
             $this->error('Something went wrong!');
+            
             return;
         }
 

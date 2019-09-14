@@ -15,12 +15,7 @@ class File
     {
         $this->owner = $client;
         $this->file = $file;
-
-        if ($id === null) {
-            $this->id = $this->generateId();
-        } else {
-            $this->id = $id;
-        }
+        $this->id = $id ?? $this->generateId();
     }
 
     private function generateId()

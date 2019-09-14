@@ -20,7 +20,6 @@ class UploadController extends Controller
             $response[] = [
                 'id' => $file->id,
                 'owner' => $file->owner,
-                'path' => $file->path(),
             ];
         }
 
