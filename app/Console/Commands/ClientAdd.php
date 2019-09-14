@@ -39,17 +39,18 @@ class ClientAdd extends Command
     public function handle()
     {
         if (empty($this->argument('name'))) {
-            $this->line('<fg=red>You must provide a name!</>');
-            die;
+            $this->error('You must provide a name!');
+            return;
         }
 
         $client = new Client($this->argument('name'));
 
         if (! $client->save()) {
-            $this->line('<fg=red>Error!</>');
+            $this->error('Something went wrong!');
+            return;
         }
 
-        $this->line('<fg=green>New client added!</>');
+        $this->info('New client added!');
         $this->line('<fg=yellow>Name:</> ' . $client->name);
         $this->line('<fg=yellow>Token:</> ' . $client->token . "\n");
     }

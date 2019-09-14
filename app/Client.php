@@ -14,7 +14,7 @@ class Client
     {
         $this->name = $name;
 
-        if (is_null($token)) {
+        if ($token === null) {
             $this->token = $this->generateToken();
         } else {
             $this->token = $token;
@@ -37,8 +37,8 @@ class Client
             return false;
         } elseif (Storage::get($name . DIRECTORY_SEPARATOR . '.token') !== $token) {
             return false;
-        } else {
-            return new self($name, $token);
         }
+
+        return new self($name, $token);
     }
 }

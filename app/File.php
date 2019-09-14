@@ -16,7 +16,7 @@ class File
         $this->owner = $client;
         $this->file = $file;
 
-        if (is_null($id)) {
+        if ($id === null) {
             $this->id = $this->generateId();
         } else {
             $this->id = $id;
@@ -58,8 +58,8 @@ class File
             $file = Storage::get($client . DIRECTORY_SEPARATOR . $id);
 
             return new self($client, $file, $id);
-        } else {
-            return false;
         }
+
+        return false;
     }
 }
