@@ -1,6 +1,8 @@
 preset: laravel
 disabled:
   - unused_use
+  - alpha_ordered_imports
+  - length_ordered_imports
   - concat_without_spaces
 enabled:
   - concat_with_spaces
