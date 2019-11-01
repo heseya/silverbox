@@ -6,11 +6,5 @@ Simple CDN Server does not require a database!
 [![gitmoji badge](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square)](https://github.com/carloscuesta/gitmoji)
 [![license](https://img.shields.io/github/license/bvlinsky/cdn?color=blue&style=flat-square)](https://github.com/bvlinsky/cdn/blob/master/LICENSE)
 
-## Documentation
--   [OpenAPI](https://bump.sh/doc/cdn)
-
-## Commands
-Creating new client
-```shell
-php artisan clients:add {name?}
-```
+## Docs
+-   [Documentation](https://bump.sh/doc/cdn)

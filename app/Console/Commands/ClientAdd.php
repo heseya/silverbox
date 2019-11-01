@@ -48,7 +48,7 @@ class ClientAdd extends Command
 
         if (! $client->save()) {
             $this->error('Something went wrong!');
-            
+
             return;
         }
 

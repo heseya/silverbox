@@ -22,4 +22,21 @@ class ViewController extends Controller
 
         return response($file->file)->header('Content-Type', $file->contentType());
     }
+
+    /**
+     * View info about file.
+     *
+     * @return Response
+     */
+    public function info($client, $fileId)
+    {
+        $file = File::find($client, $fileId);
+
+        // File not found
+        if (! $file) {
+            return response()->json(['message' => 'not found'], 404);
+        }
+
+        return response()->json($file->info());
+    }
 }
