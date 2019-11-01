@@ -1,0 +1,135 @@
+openapi: 3.0.0
+info:
+  title: CDN
+  version: 0.1.0
+  license:
+    name: MIT
+  description: |
+
+    ## Console commands
+    Creating new client
+    ```shell
+    php artisan clients:add {name?}
+    ```
+
+paths:
+  /{client}:
+    parameters:
+    - name: client
+      in: path
+      required: true
+      description: Client name
+      schema:
+        type: string
+    post:
+      summary: Upload a file
+      operationId: file-upload
+      tags:
+        - Files
+      security:
+        - bearer: []
+      responses:
+        '201':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /{client}/{fileId}:
+    parameters:
+    - name: client
+      in: path
+      required: true
+      description: Client name
+      schema:
+        type: string
+    - name: fileId
+      in: path
+      required: true
+      description: The id of the file to retrieve
+      schema:
+        type: string
+    get:
+      summary: Get a file
+      operationId: file-get
+      tags:
+        - Files
+      responses:
+        '200':
+          description: Binary file.
+    delete:
+      summary: Delete a file
+      operationId: file-delete
+      tags:
+        - Files
+      security:
+        - bearer: []
+      responses:
+        '204':
+          description: File successfully deleted.
+
+  /{client}/{fileId}/info:
+    parameters:
+    - name: client
+      in: path
+      required: true
+      description: Client name
+      schema:
+        type: string
+    - name: fileId
+      in: path
+      required: true
+      description: The id of the file to retrieve
+      schema:
+        type: string
+    get:
+      summary: File info
+      operationId: file-info
+      tags:
+        - Files
+      security:
+        - bearer: []
+      responses:
+        '200':
+          description: Info about file
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+
+components:
+  schemas:
+    File:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          example: '3e2S49ZlOoRqxcUJsK8qwNBbH9eGjSym'
+        owner:
+          type: string
+          example: 'client'
+        path:
+          type: string
+          example: 'client/3e2S49ZlOoRqxcUJsK8qwNBbH9eGjSym'
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer

@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class File
 {
@@ -45,6 +45,15 @@ class File
     public function delete()
     {
         return Storage::delete($this->path());
+    }
+
+    public function info()
+    {
+        return [
+            'id' => $this->id,
+            'owner' => $this->owner,
+            'path' => $this->path(),
+        ];
     }
 
     public static function find($client, $id)

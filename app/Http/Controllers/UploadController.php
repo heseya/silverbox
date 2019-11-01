@@ -17,10 +17,7 @@ class UploadController extends Controller
         foreach ($request->allFiles() as $uploaded) {
             $file = new File($request->client->name, $uploaded);
             $file->save();
-            $response[] = [
-                'id' => $file->id,
-                'owner' => $file->owner,
-            ];
+            $response[] = $file->info();
         }
 
         return response()->json($response ?? [], 201);
