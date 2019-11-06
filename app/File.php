@@ -2,29 +2,19 @@
 
 namespace App;
 
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class File
 {
     public $id;
     public $owner;
-    public $file;
+    public $private;
 
-    public function __construct($client, $file, $id = null)
+    public function __construct($client, $id = null)
     {
         $this->owner = $client;
-        $this->file = $file;
         $this->id = $id ?? $this->generateId();
-    }
-
-    private function generateId()
-    {
-        do {
-            $id = Str::random(32);
-        } while (Storage::exists($this->owner . DIRECTORY_SEPARATOR . $id));
-
-        return $id;
     }
 
     public function path()
@@ -32,19 +22,24 @@ class File
         return $this->owner . DIRECTORY_SEPARATOR . $this->id;
     }
 
-    public function contentType()
+    public function visibility()
+    {
+        return Storage::getVisibility($this->path());
+    }
+
+    public function mimeType()
     {
         return Storage::mimeType($this->path());
     }
 
-    public function save()
+    public function size()
     {
-        return Storage::putFileAs($this->owner, $this->file, $this->id);
+        return Storage::size($this->path());
     }
 
-    public function delete()
+    public function binary()
     {
-        return Storage::delete($this->path());
+        return Storage::get($this->path());
     }
 
     public function info()
@@ -52,16 +47,30 @@ class File
         return [
             'id' => $this->id,
             'owner' => $this->owner,
+            'visibility' => $this->visibility(),
             'path' => $this->path(),
+            'mime' => $this->mimeType(),
+            'size' => $this->size(),
         ];
+    }
+
+    public static function save($file, $client, $private = false)
+    {
+        $file = Storage::putFile($client, $file);
+        Storage::setVisibility($file, $private ? 'private' : 'public');
+
+        return new self($client, ltrim($file, DIRECTORY_SEPARATOR . $client));
+    }
+
+    public function delete()
+    {
+        return Storage::delete($this->path());
     }
 
     public static function find($client, $id)
     {
         if (Storage::exists($client . DIRECTORY_SEPARATOR . $id)) {
-            $file = Storage::get($client . DIRECTORY_SEPARATOR . $id);
-
-            return new self($client, $file, $id);
+            return new self($client, $id);
         }
 
         return false;

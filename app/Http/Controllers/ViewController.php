@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\File;
+use App\Client;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class ViewController extends Controller
 {
@@ -11,7 +14,7 @@ class ViewController extends Controller
      *
      * @return Response
      */
-    public function view($client, $fileId)
+    public function view(Request $request, $client, $fileId)
     {
         $file = File::find($client, $fileId);
 
@@ -20,7 +23,16 @@ class ViewController extends Controller
             return response()->json(['message' => 'not found'], 404);
         }
 
-        return response($file->file)->header('Content-Type', $file->contentType());
+        // Private file
+        if ($file->visibility() !== 'public') {
+            $request->client = Client::login($request->client, $request->bearerToken());
+
+            if (! $request->client) {
+                return response()->json(['message' => 'unauthorized'], 401);
+            }
+        }
+
+        return response($file->binary())->header('Content-Type', $file->mimeType());
     }
 
     /**

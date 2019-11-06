@@ -15,8 +15,7 @@ class UploadController extends Controller
     public function upload(Request $request)
     {
         foreach ($request->allFiles() as $uploaded) {
-            $file = new File($request->client->name, $uploaded);
-            $file->save();
+            $file = File::save($uploaded, $request->client->name, isset($request->private));
             $response[] = $file->info();
         }
 
