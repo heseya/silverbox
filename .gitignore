@@ -5,3 +5,4 @@ Homestead.yaml
 .env
 .DS_STORE
 .vscode
+.phpunit.result.cache

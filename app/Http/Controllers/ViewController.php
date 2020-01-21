@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\File;
 use App\Client;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class ViewController extends Controller
 {
