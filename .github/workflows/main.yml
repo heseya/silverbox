@@ -1,0 +1,19 @@
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy API doc
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Deploy
+      id: deploy
+      uses: scharrier/github-actions@master
+      with:
+        id: ${{ secrets.doc_id }}
+        token: ${{ secrets.doc_token }}
+        file: docs/openapi.yml
