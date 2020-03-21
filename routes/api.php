@@ -11,11 +11,10 @@
 |
  */
 
-$router->get('/', 'HomeController@info');
 $router->get('{client}/{file}', 'ViewController@view');
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('{client}', 'UploadController@upload');
     $router->delete('{client}/{file}', 'DeleteController@delete');
-    $router->get('{client}/{file}/info', 'ViewController@info');
+    $router->options('{client}/{file}', 'ViewController@info');
 });

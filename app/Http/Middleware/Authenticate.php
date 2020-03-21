@@ -16,10 +16,10 @@ class Authenticate
      */
     public function handle($request, Closure $next)
     {
-        $request->client = Client::login($request->client, $request->bearerToken());
+        $request->client = Client::login($request->client, $request->header('Authorization'));
 
         if (! $request->client) {
-            return response()->json(['message' => 'unauthorized'], 401);
+            return abort(401);
         }
 
         return $next($request);

@@ -8,32 +8,32 @@ use Illuminate\Support\Facades\Storage;
 class Client
 {
     public $name;
-    public $token;
+    public $key;
 
-    public function __construct($name, $token = null)
+    public function __construct($name, $key = null)
     {
         $this->name = $name;
-        $this->token = $token ?? $this->generateToken();
+        $this->key = $key ?? $this->generateKey();
     }
 
-    private function generateToken()
+    private function generateKey(): string
     {
         return Str::random(512);
     }
 
     public function save()
     {
-        return Storage::put($this->name . DIRECTORY_SEPARATOR . '.token', $this->token);
+        return Storage::put($this->name . DIRECTORY_SEPARATOR . '.key', $this->key);
     }
 
-    public static function login($name, $token)
+    public static function login($name, $key)
     {
-        if (! Storage::exists($name . DIRECTORY_SEPARATOR . '.token')) {
+        if (! Storage::exists($name . DIRECTORY_SEPARATOR . '.key')) {
             return false;
-        } elseif (Storage::get($name . DIRECTORY_SEPARATOR . '.token') !== $token) {
+        } elseif (Storage::get($name . DIRECTORY_SEPARATOR . '.key') !== $key) {
             return false;
         }
 
-        return new self($name, $token);
+        return new self($name, $key);
     }
 }

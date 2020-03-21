@@ -23,6 +23,8 @@ $app = new Laravel\Lumen\Application(
 
 $app->withFacades();
 
+Illuminate\Http\Resources\Json\Resource::withoutWrapping();
+
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\File;
+use Illuminate\Http\JsonResponse;
+use Laravel\Lumen\Routing\Controller as BaseController;
 
-class DeleteController extends Controller
+class DeleteController extends BaseController
 {
     /**
      * Files remove.
@@ -17,7 +19,7 @@ class DeleteController extends Controller
 
         // File not found
         if (! $file) {
-            return response()->json(['message' => 'not found'], 404);
+            return abort(404);
         }
 
         $file->delete();

@@ -12,31 +12,21 @@ class ClientAdd extends Command
      *
      * @var string
      */
-    protected $signature = 'clients:add {name?}';
+    protected $signature = 'client:add {name?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Add a new CDN client';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    protected $description = 'Add a new client';
 
     /**
      * Execute the console command.
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(): void
     {
         if (empty($this->argument('name'))) {
             $this->error('You must provide a name!');
@@ -54,6 +44,6 @@ class ClientAdd extends Command
 
         $this->info('New client added!');
         $this->line('<fg=yellow>Name:</> ' . $client->name);
-        $this->line('<fg=yellow>Token:</> ' . $client->token . "\n");
+        $this->line('<fg=yellow>API Key:</> ' . $client->key . "\n");
     }
 }

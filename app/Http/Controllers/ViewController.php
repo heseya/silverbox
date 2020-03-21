@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\File;
 use App\Client;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Resources\FileResource;
+use Laravel\Lumen\Routing\Controller as BaseController;
 
-class ViewController extends Controller
+class ViewController extends BaseController
 {
     /**
      * Files view.
@@ -19,15 +22,15 @@ class ViewController extends Controller
 
         // File not found
         if (! $file) {
-            return response()->json(['message' => 'not found'], 404);
+            return abort(404);
         }
 
         // Private file
         if ($file->visibility() !== 'public') {
-            $request->client = Client::login($request->client, $request->bearerToken());
+            $request->client = Client::login($request->client, $request->header('Authorization'));
 
             if (! $request->client) {
-                return response()->json(['message' => 'unauthorized'], 401);
+                return abort(403);
             }
         }
 
@@ -45,9 +48,9 @@ class ViewController extends Controller
 
         // File not found
         if (! $file) {
-            return response()->json(['message' => 'not found'], 404);
+            return abort(404);
         }
 
-        return response()->json($file->info());
+        return new FileResource($file);
     }
 }

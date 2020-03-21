@@ -42,26 +42,6 @@ class File
         return Storage::get($this->path());
     }
 
-    public function info()
-    {
-        return [
-            'id' => $this->id,
-            'owner' => $this->owner,
-            'visibility' => $this->visibility(),
-            'path' => $this->path(),
-            'mime' => $this->mimeType(),
-            'size' => $this->size(),
-        ];
-    }
-
-    public static function save($file, $client, $private = false)
-    {
-        $file = Storage::putFile($client, $file);
-        Storage::setVisibility($file, $private ? 'private' : 'public');
-
-        return new self($client, ltrim($file, DIRECTORY_SEPARATOR . $client));
-    }
-
     public function delete()
     {
         return Storage::delete($this->path());
@@ -74,5 +54,13 @@ class File
         }
 
         return false;
+    }
+
+    public static function save($file, $client, $private = false)
+    {
+        $file = Storage::putFile($client, $file);
+        Storage::setVisibility($file, $private ? 'private' : 'public');
+
+        return new self($client, ltrim($file, DIRECTORY_SEPARATOR . $client));
     }
 }

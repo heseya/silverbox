@@ -1,7 +1,7 @@
 {
-    "name": "bvlinsky/cdn",
-    "description": "Simple CDN powered by Lumen.",
-    "keywords": ["cdn", "php", "lumen"],
+    "name": "heseya/silverbox",
+    "description": "Simple file server powered by Lumen.",
+    "keywords": ["fileserver", "files", "server", "php", "lumen"],
     "license": "MIT",
     "type": "project",
     "require": {
