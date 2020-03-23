@@ -1,8 +1,11 @@
 preset: laravel
+
 disabled:
-  - unused_use
-  - alpha_ordered_imports
-  - length_ordered_imports
   - concat_without_spaces
+
 enabled:
+  - phpdoc_order
+  - phpdoc_property
+  - phpdoc_separation
   - concat_with_spaces
+  - phpdoc_add_missing_param_annotation
