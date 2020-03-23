@@ -13,6 +13,7 @@ class UploadController extends BaseController
      * Files upload.
      *
      * @param  \Illuminate\Http\Request  $request
+     *
      * @return Response
      */
     public function upload(Request $request)

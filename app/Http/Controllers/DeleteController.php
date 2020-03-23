@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\File;
-use Illuminate\Http\JsonResponse;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class DeleteController extends BaseController
 {
     /**
      * Files remove.
+     *
+     * @param mixed $client
+     * @param mixed $fileId
      *
      * @return Response
      */
