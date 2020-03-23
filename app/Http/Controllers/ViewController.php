@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\File;
 use App\Client;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use App\Http\Resources\FileResource;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -13,6 +12,9 @@ class ViewController extends BaseController
 {
     /**
      * Files view.
+     *
+     * @param mixed $client
+     * @param mixed $fileId
      *
      * @return Response
      */
@@ -39,6 +41,9 @@ class ViewController extends BaseController
 
     /**
      * View info about file.
+     *
+     * @param mixed $client
+     * @param mixed $fileId
      *
      * @return Response
      */
