@@ -19,7 +19,7 @@ class Authenticate
     {
         $request->client = Client::login($request->client, $request->header('Authorization'));
 
-        if (! $request->client) {
+        if (!$request->client) {
             return abort(401);
         }
 

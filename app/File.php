@@ -6,19 +6,19 @@ use Illuminate\Support\Facades\Storage;
 
 class File
 {
-    public $id;
+    public $name;
     public $owner;
     public $private;
 
-    public function __construct($client, $id = null)
+    public function __construct(string $client, string $name)
     {
         $this->owner = $client;
-        $this->id = $id ?? $this->generateId();
+        $this->name = $name;
     }
 
     public function path()
     {
-        return $this->owner . DIRECTORY_SEPARATOR . $this->id;
+        return $this->owner . DIRECTORY_SEPARATOR . $this->name;
     }
 
     public function visibility()
@@ -46,16 +46,16 @@ class File
         return Storage::delete($this->path());
     }
 
-    public static function find($client, $id)
+    public static function find(string $client, string $name)
     {
-        if (Storage::exists($client . DIRECTORY_SEPARATOR . $id)) {
-            return new self($client, $id);
+        if (Storage::exists($client . DIRECTORY_SEPARATOR . $name)) {
+            return new self($client, $name);
         }
 
         return false;
     }
 
-    public static function save($file, $client, $private = false)
+    public static function save(string $file, string $client, bool $private = false)
     {
         $file = Storage::putFile($client, $file);
         Storage::setVisibility($file, $private ? 'private' : 'public');

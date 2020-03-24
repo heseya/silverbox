@@ -16,7 +16,7 @@ class FileResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
+            'name' => $this->name,
             'owner' => $this->owner,
             'visibility' => $this->visibility(),
             'path' => $this->path(),

@@ -13,14 +13,14 @@ class ViewController extends BaseController
     /**
      * Files view.
      *
-     * @param mixed $client
-     * @param mixed $fileId
+     * @param string $client
+     * @param string $fileName
      *
      * @return Response
      */
-    public function view(Request $request, $client, $fileId)
+    public function view(Request $request, string $client, string $fileName)
     {
-        $file = File::find($client, $fileId);
+        $file = File::find($client, $fileName);
 
         // File not found
         if (! $file) {
@@ -43,13 +43,13 @@ class ViewController extends BaseController
      * View info about file.
      *
      * @param mixed $client
-     * @param mixed $fileId
+     * @param mixed $fileName
      *
      * @return Response
      */
-    public function info($client, $fileId)
+    public function info(string $client, string $fileName)
     {
-        $file = File::find($client, $fileId);
+        $file = File::find($client, $fileName);
 
         // File not found
         if (! $file) {

@@ -11,16 +11,16 @@ class DeleteController extends BaseController
      * Files remove.
      *
      * @param mixed $client
-     * @param mixed $fileId
+     * @param mixed $fileName
      *
      * @return Response
      */
-    public function delete($client, $fileId)
+    public function delete(string $client, string $fileName)
     {
-        $file = File::find($client, $fileId);
+        $file = File::find($client, $fileName);
 
         // File not found
-        if (! $file) {
+        if (!$file) {
             return abort(404);
         }
 
