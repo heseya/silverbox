@@ -28,7 +28,7 @@ class Client
 
     public static function login(string $name, string $key)
     {
-        if (!Storage::exists($name . DIRECTORY_SEPARATOR . '.key')) {
+        if (! Storage::exists($name . DIRECTORY_SEPARATOR . '.key')) {
             return;
         } elseif (Storage::get($name . DIRECTORY_SEPARATOR . '.key') !== $key) {
             return;
