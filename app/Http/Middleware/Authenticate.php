@@ -17,7 +17,7 @@ class Authenticate
      */
     public function handle($request, Closure $next)
     {
-        $request->client = Client::login($request->client, $request->header('Authorization'));
+        $request->client = Client::login($request->client, $request->header('Authorization', ''));
 
         if (!$request->client) {
             return abort(401);

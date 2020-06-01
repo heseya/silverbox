@@ -23,7 +23,7 @@ $app = new Laravel\Lumen\Application(
 
 $app->withFacades();
 
-Illuminate\Http\Resources\Json\Resource::withoutWrapping();
+Illuminate\Http\Resources\Json\JsonResource::withoutWrapping();
 
 /*
 |--------------------------------------------------------------------------

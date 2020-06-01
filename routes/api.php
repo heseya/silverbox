@@ -11,10 +11,10 @@
 |
  */
 
-$router->get('{client}/{file}', 'ViewController@view');
+$router->get('{client}/{fileName}', 'ViewController@view');
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('{client}', 'UploadController@upload');
-    $router->delete('{client}/{file}', 'DeleteController@delete');
-    $router->options('{client}/{file}', 'ViewController@info');
+    $router->delete('{client}/{fileName}', 'DeleteController@delete');
+    $router->options('{client}/{fileName}', 'ViewController@info');
 });
