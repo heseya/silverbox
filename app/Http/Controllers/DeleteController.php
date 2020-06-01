@@ -20,7 +20,7 @@ class DeleteController extends BaseController
         $file = File::find($client, $fileName);
 
         // File not found
-        if (!$file) {
+        if (! $file) {
             return abort(404);
         }
 
