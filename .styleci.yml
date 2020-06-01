@@ -5,9 +5,11 @@ disabled:
   - concat_without_spaces
 
 enabled:
+  - is_null
   - phpdoc_order
   - phpdoc_property
   - phpdoc_separation
+  - logical_operators
   - concat_with_spaces
   - length_ordered_imports
   - phpdoc_add_missing_param_annotation
