@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Exception;
 use Illuminate\Support\Facades\Storage;
 
 class File
