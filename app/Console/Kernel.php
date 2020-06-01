@@ -12,6 +12,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\ClientAdd::class,
+        Commands\ClientsAdd::class,
+        Commands\ClientsShow::class,
     ];
 }
