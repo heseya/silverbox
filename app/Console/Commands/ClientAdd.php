@@ -36,7 +36,7 @@ class ClientAdd extends Command
 
         $client = new Client($this->argument('name'));
 
-        if (! $client->save()) {
+        if (!$client->save()) {
             $this->error('Something went wrong!');
 
             return;

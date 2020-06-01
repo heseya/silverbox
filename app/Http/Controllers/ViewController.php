@@ -23,7 +23,7 @@ class ViewController extends BaseController
         $file = File::find($client, $fileName);
 
         // File not found
-        if (! $file) {
+        if (!$file) {
             return abort(404);
         }
 
@@ -31,7 +31,7 @@ class ViewController extends BaseController
         if ($file->visibility() !== 'public') {
             $request->client = Client::login($request->client, $request->header('Authorization'));
 
-            if (! $request->client) {
+            if (!$request->client) {
                 return abort(403);
             }
         }
@@ -52,7 +52,7 @@ class ViewController extends BaseController
         $file = File::find($client, $fileName);
 
         // File not found
-        if (! $file) {
+        if (!$file) {
             return abort(404);
         }
 
