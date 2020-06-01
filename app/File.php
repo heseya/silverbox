@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Exception;
 use Illuminate\Support\Facades\Storage;
 
 class File
@@ -31,6 +32,11 @@ class File
         return Storage::mimeType($this->path());
     }
 
+    public function lastModified()
+    {
+        return Storage::lastModified($this->path());
+    }
+
     public function size()
     {
         return Storage::size($this->path());
@@ -57,8 +63,7 @@ class File
 
     public static function save(string $file, string $client, bool $private = false)
     {
-        $file = Storage::putFile($client, $file);
-        Storage::setVisibility($file, $private ? 'private' : 'public');
+        $file = Storage::putFile($client, $file, $private ? 'private' : 'public');
 
         return new self($client, ltrim($file, DIRECTORY_SEPARATOR . $client));
     }
