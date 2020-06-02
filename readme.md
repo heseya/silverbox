@@ -7,7 +7,7 @@ Simple file server powered by Lumen.
 [![license](https://img.shields.io/github/license/bvlinsky/cdn?color=blue&style=flat-square)](https://github.com/bvlinsky/cdn/blob/master/LICENSE)
 
 ## Requirements
-SSH access to a server with **PHP 7.2+** and [Composer](https://getcomposer.org/).
+SSH access to a server with **PHP 7.3+** and [Composer](https://getcomposer.org/).
 
 ## Instalation
 ```
@@ -16,7 +16,12 @@ composer create-project heseya/silverbox -s dev
 
 Create API client
 ```
-php silverbox client:add {clientName}
+php silverbox clients:add {clientName}
+```
+
+Show list of all clients
+```
+php silverbox clients:show
 ```
 
 ## License

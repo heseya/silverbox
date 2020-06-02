@@ -39,7 +39,7 @@ class ClientsShow extends Command
 
             $clients[] = [
                 $directory,
-                number_format($size / 1048576, 2) . 'MB',
+                number_format($size / 1048576, 2) . ' MB',
                 Storage::exists($directory . DIRECTORY_SEPARATOR . '.key') ? 'yes' : 'no',
             ];
         }
