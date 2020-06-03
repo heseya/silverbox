@@ -6,6 +6,7 @@ use App\File;
 use App\Client;
 use Illuminate\Http\Request;
 use App\Http\Resources\FileResource;
+use Intervention\Image\Facades\Image;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class ViewController extends BaseController
@@ -36,7 +37,18 @@ class ViewController extends BaseController
             }
         }
 
-        return response($file->binary())->header('Content-Type', $file->mimeType());
+        if (isset($request->w) || isset($request->h)) {
+            $response = Image::cache(function ($image) use ($file, $request) {
+                return $image->make($file->binary())
+                ->resize($request->w, $request->h, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+            });
+        }
+
+        return response($response ?? $file->binary())
+            ->header('Content-Type', $file->mimeType());
     }
 
     /**
