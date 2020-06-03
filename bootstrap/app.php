@@ -23,6 +23,8 @@ $app = new Laravel\Lumen\Application(
 
 $app->withFacades();
 
+$app->register(Intervention\Image\ImageServiceProviderLumen::class);
+
 Illuminate\Http\Resources\Json\JsonResource::withoutWrapping();
 
 /*
