@@ -5,14 +5,14 @@ namespace App\Console\Commands;
 use App\Client;
 use Illuminate\Console\Command;
 
-class ClientAdd extends Command
+class ClientsAdd extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'client:add {name?}';
+    protected $signature = 'clients:add {name?}';
 
     /**
      * The console command description.
