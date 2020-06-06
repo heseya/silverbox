@@ -22,6 +22,7 @@ class FileResource extends JsonResource
             'path' => $this->path(),
             'mime' => $this->mimeType(),
             'size' => $this->size(),
+            'lastModified' => $this->lastModified(),
         ];
     }
 }
