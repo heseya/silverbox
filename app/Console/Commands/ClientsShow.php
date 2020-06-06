@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use ByteUnits\Binary as ByteUnits;
 use Illuminate\Support\Facades\Storage;
 
 class ClientsShow extends Command
@@ -31,19 +32,19 @@ class ClientsShow extends Command
         $clients = [];
 
         foreach (Storage::directories() as $directory) {
-            $size = 0;
+            $size = ByteUnits::bytes(0);
 
             foreach (Storage::allFiles($directory) as $file) {
-                $size += Storage::size($file);
+                $size = $size->add(ByteUnits::bytes(Storage::size($file)));
             }
 
             $clients[] = [
                 $directory,
-                number_format($size / 1048576, 2) . ' MB',
+                $size->asMetric()->format(null, ' '),
                 Storage::exists($directory . DIRECTORY_SEPARATOR . '.key') ? 'yes' : 'no',
             ];
         }
 
-        $this->table(['client', 'size', 'key'], $clients);
+        $this->table(['client', 'usage', 'key'], $clients);
     }
 }
