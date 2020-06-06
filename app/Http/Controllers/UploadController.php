@@ -27,7 +27,7 @@ class UploadController extends BaseController
                 $file = File::save(
                     $uploaded,
                     $request->client->name,
-                    (isset($request->private) && $request->private != false)
+                    (isset($request->private) && $request->private !== 'false'),
                 );
 
                 if (!Storage::exists($file->path())) {
