@@ -20,12 +20,14 @@ class UploadController extends BaseController
      */
     public function upload(Request $request)
     {
+        $files = [];
+
         foreach ($request->allFiles() as $uploaded) {
             $files[] = retry(3, function () use ($uploaded, $request) {
                 $file = File::save(
                     $uploaded,
                     $request->client->name,
-                    isset($request->private)
+                    (isset($request->private) && $request->private != false)
                 );
 
                 if (!Storage::exists($file->path())) {
@@ -36,6 +38,6 @@ class UploadController extends BaseController
             });
         }
 
-        return FileResource::collection($files ?? []);
+        return FileResource::collection($files);
     }
 }
