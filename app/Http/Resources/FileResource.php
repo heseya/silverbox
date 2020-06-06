@@ -9,6 +9,8 @@ class FileResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
+     * @param mixed $request
+     *
      * @return array
      */
     public function toArray($request)
