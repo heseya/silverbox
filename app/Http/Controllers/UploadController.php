@@ -17,8 +17,9 @@ class UploadController extends BaseController
      *
      * @param Request $request
      *
-     * @return AnonymousResourceCollection
      * @throws Exception
+     *
+     * @return AnonymousResourceCollection
      */
     public function upload(Request $request)
     {
