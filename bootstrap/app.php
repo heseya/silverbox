@@ -27,6 +27,8 @@ $app->register(Intervention\Image\ImageServiceProviderLumen::class);
 
 Illuminate\Http\Resources\Json\JsonResource::withoutWrapping();
 
+config(['hashing' => ['driver' => 'argon']]);
+
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings

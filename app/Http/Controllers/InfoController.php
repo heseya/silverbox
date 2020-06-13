@@ -3,25 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\File;
-use Illuminate\Http\JsonResponse;
+use App\Http\Resources\FileResource;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
-class DeleteController extends BaseController
+class InfoController extends BaseController
 {
     /**
-     * Files remove.
+     * View info about file.
      *
      * @param string $client
      * @param string $fileName
      *
-     * @return JsonResponse
+     * @return FileResource
      */
-    public function delete(string $client, string $fileName)
+    public function info(string $client, string $fileName)
     {
         $file = File::findOrFail($client, $fileName);
 
-        $file->delete();
-
-        return response()->json(null, 204);
+        return FileResource::make($file);
     }
 }

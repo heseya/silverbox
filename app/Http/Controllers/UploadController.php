@@ -8,15 +8,17 @@ use Illuminate\Http\Request;
 use App\Http\Resources\FileResource;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Lumen\Routing\Controller as BaseController;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UploadController extends BaseController
 {
     /**
      * Files upload.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      *
-     * @return Response
+     * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function upload(Request $request)
     {
