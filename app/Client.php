@@ -35,10 +35,10 @@ class Client
     {
         $file = File::findOrFail($name, '.key');
 
-        if (Hash::check($key, $file->binary())) {
-            return new self($name, $key);
+        if (!Hash::check($key, $file->binary())) {
+            return abort(401, 'API key is missing or invalid');
         }
 
-        return abort(401, 'API key is missing or invalid');
+        return new self($name, $key);
     }
 }

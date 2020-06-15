@@ -52,11 +52,11 @@ class File
 
     public static function findOrFail(string $client, string $name)
     {
-        if (Storage::exists($client . DIRECTORY_SEPARATOR . $name)) {
-            return new self($client, $name);
+        if (!Storage::exists($client . DIRECTORY_SEPARATOR . $name)) {
+            return abort(404, 'File not found');
         }
 
-        return abort(404, 'File not found');
+        return new self($client, $name);
     }
 
     public static function save(string $file, string $client, bool $private = false)
