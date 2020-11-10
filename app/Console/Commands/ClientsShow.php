@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use ByteUnits\Binary as ByteUnits;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
 class ClientsShow extends Command
