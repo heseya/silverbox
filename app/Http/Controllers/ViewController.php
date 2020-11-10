@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\File;
 use App\Client;
-use Illuminate\Http\Request;
+use App\File;
 use App\Http\Resources\FileResource;
+use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
