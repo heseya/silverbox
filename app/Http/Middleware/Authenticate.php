@@ -3,8 +3,8 @@
 namespace App\Http\Middleware;
 
 use App\Client;
-use Illuminate\Http\Request;
 use Closure;
+use Illuminate\Http\Request;
 
 class Authenticate
 {

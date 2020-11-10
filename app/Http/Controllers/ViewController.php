@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use App\File;
-use App\Http\Resources\FileResource;
-use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Intervention\Image\Facades\Image;
 use Laravel\Lumen\Routing\Controller as BaseController;
 

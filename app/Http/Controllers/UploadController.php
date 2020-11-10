@@ -6,9 +6,9 @@ use App\File;
 use App\Http\Resources\FileResource;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Lumen\Routing\Controller as BaseController;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UploadController extends BaseController
 {
