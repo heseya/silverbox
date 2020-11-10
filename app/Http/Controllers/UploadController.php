@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\File;
+use App\Http\Resources\FileResource;
 use Exception;
 use Illuminate\Http\Request;
-use App\Http\Resources\FileResource;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
