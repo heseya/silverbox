@@ -37,10 +37,10 @@ class ViewController extends BaseController
             }
         }
 
-        if (isset($request->w) || isset($request->h)) {
+        if ($file->mimeType() !== 'image/svg+xml' && ($request->has('w') || $request->has('h'))) {
             $response = Image::cache(function ($image) use ($file, $request) {
                 return $image->make($file->binary())
-                ->resize($request->w, $request->h, function ($constraint) {
+                ->resize($request->input('w'), $request->input('h'), function ($constraint) {
                     $constraint->aspectRatio();
                     $constraint->upsize();
                 });
