@@ -54,7 +54,7 @@ class ViewController extends BaseController
                     $constraint->aspectRatio();
                     $constraint->upsize();
                 })->encode();
-                
+
                 Storage::put($client . DIRECTORY_SEPARATOR . $cacheName, $image);
 
                 $cached = File::find($client, $cacheName);
