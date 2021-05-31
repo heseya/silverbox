@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Client;
 use App\File;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
