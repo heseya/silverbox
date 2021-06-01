@@ -21,7 +21,7 @@ class ViewController extends BaseController
      *
      * @return Response
      */
-    public function view(Request $request, string $client, string $fileName): Response
+    public function show(Request $request, string $client, string $fileName): Response
     {
         $file = File::findOrFail($client, $fileName);
 
