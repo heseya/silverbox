@@ -1,13 +1,15 @@
 <?php
 
+use Laravel\Lumen\Application;
+
 abstract class TestCase extends Laravel\Lumen\Testing\TestCase
 {
     /**
      * Creates the application.
      *
-     * @return \Laravel\Lumen\Application
+     * @return Application
      */
-    public function createApplication()
+    public function createApplication(): Application
     {
         return require __DIR__ . '/../bootstrap/app.php';
     }

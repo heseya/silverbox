@@ -2,13 +2,14 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Client
 {
-    public $name;
-    public $key;
+    public string $name;
+    public string $key;
 
     public function __construct(string $name, ?string $key = null)
     {
@@ -21,17 +22,21 @@ class Client
         return Str::random(512);
     }
 
-    public function save()
+    public function save(): bool
     {
-        return Storage::put($this->name . DIRECTORY_SEPARATOR . '.key', $this->key);
+        return Storage::put(
+            $this->name . DIRECTORY_SEPARATOR . '.key',
+            Hash::make($this->key),
+            'private',
+        );
     }
 
-    public static function login(string $name, string $key)
+    public static function loginOrFail(string $name, ?string $key): self
     {
-        if (!Storage::exists($name . DIRECTORY_SEPARATOR . '.key')) {
-            return;
-        } elseif (Storage::get($name . DIRECTORY_SEPARATOR . '.key') !== $key) {
-            return;
+        $file = File::findOrFail($name, '.key');
+
+        if (!Hash::check($key, $file->binary())) {
+            abort(401, 'API key is missing or invalid');
         }
 
         return new self($name, $key);
