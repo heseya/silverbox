@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use App\File;
-use App\Http\Resources\FileResource;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -15,27 +15,19 @@ class ViewController extends BaseController
     /**
      * Files view.
      *
+     * @param Request $request
      * @param string $client
      * @param string $fileName
      *
      * @return Response
      */
-    public function view(Request $request, string $client, string $fileName)
+    public function show(Request $request, string $client, string $fileName): Response
     {
-        $file = File::find($client, $fileName);
-
-        // File not found
-        if (!$file) {
-            return abort(404);
-        }
+        $file = File::findOrFail($client, $fileName);
 
         // Private file
         if ($file->visibility() !== 'public') {
-            $request->client = Client::login($request->client, $request->header('Authorization'));
-
-            if (!$request->client) {
-                return abort(403);
-            }
+            Client::loginOrFail($request->client, $request->header('x-api-key'));
         }
 
         if ($file->mimeType() !== 'image/svg+xml' && ($request->has('w') || $request->has('h'))) {
@@ -66,25 +58,5 @@ class ViewController extends BaseController
         return response($file->binary())
             ->header('Content-Type', $file->mimeType())
             ->header('Cache-Control', 'public, max-age=' . env('CACHE_TIME', 15552000)); // default 6 months
-    }
-
-    /**
-     * View info about file.
-     *
-     * @param mixed $client
-     * @param mixed $fileName
-     *
-     * @return Response
-     */
-    public function info(string $client, string $fileName)
-    {
-        $file = File::find($client, $fileName);
-
-        // File not found
-        if (!$file) {
-            return abort(404);
-        }
-
-        return new FileResource($file);
     }
 }

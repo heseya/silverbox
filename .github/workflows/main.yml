@@ -1,19 +1,20 @@
+name: Deploy Docs
+
 on:
   push:
     branches:
       - master
 
 jobs:
-  deploy:
+  deploy-doc:
+    name: Deploy API doc on Bump
     runs-on: ubuntu-latest
-    name: Deploy API doc
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Deploy
-      id: deploy
-      uses: scharrier/github-actions@master
-      with:
-        id: ${{ secrets.doc_id }}
-        token: ${{ secrets.doc_token }}
-        file: docs/openapi.yml
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Deploy API documentation
+        uses: bump-sh/github-action@0.3
+        with:
+          doc: <BUMP_DOC_ID>
+          token: ${{secrets.BUMP_TOKEN}}
+          file: doc/api-documentation.yml
