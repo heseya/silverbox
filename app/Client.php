@@ -22,7 +22,7 @@ class Client
         return Str::random(512);
     }
 
-    public function save()
+    public function save(): bool
     {
         return Storage::put(
             $this->name . DIRECTORY_SEPARATOR . '.key',
@@ -31,12 +31,12 @@ class Client
         );
     }
 
-    public static function loginOrFail(string $name, ?string $key)
+    public static function loginOrFail(string $name, ?string $key): self
     {
         $file = File::findOrFail($name, '.key');
 
         if (!Hash::check($key, $file->binary())) {
-            return abort(401, 'API key is missing or invalid');
+            abort(401, 'API key is missing or invalid');
         }
 
         return new self($name, $key);

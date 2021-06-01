@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\File;
 use App\Http\Resources\FileResource;
+use Illuminate\Http\JsonResponse;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class InfoController extends BaseController
@@ -14,12 +15,12 @@ class InfoController extends BaseController
      * @param string $client
      * @param string $fileName
      *
-     * @return FileResource
+     * @return JsonResponse
      */
-    public function info(string $client, string $fileName)
+    public function info(string $client, string $fileName): JsonResponse
     {
         $file = File::findOrFail($client, $fileName);
 
-        return FileResource::make($file);
+        return FileResource::make($file)->response();
     }
 }

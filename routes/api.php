@@ -12,7 +12,7 @@
  */
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
-    $router->post('{client}', 'UploadController@upload');
+    $router->post('{client}', 'UploadController@store');
     $router->delete('{client}/{fileName}', 'DeleteController@delete');
     $router->get('{client}/{fileName}/info', 'InfoController@info');
 });

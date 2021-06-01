@@ -15,51 +15,51 @@ class File
         $this->name = $name;
     }
 
-    public function path()
+    public function path(): string
     {
         return $this->owner . DIRECTORY_SEPARATOR . $this->name;
     }
 
-    public function visibility()
+    public function visibility(): string
     {
         return Storage::getVisibility($this->path());
     }
 
-    public function mimeType()
+    public function mimeType(): bool|string
     {
         return Storage::mimeType($this->path());
     }
 
-    public function lastModified()
+    public function lastModified(): int
     {
         return Storage::lastModified($this->path());
     }
 
-    public function size()
+    public function size(): int
     {
         return Storage::size($this->path());
     }
 
-    public function binary()
+    public function binary(): string
     {
         return Storage::get($this->path());
     }
 
-    public function delete()
+    public function delete(): bool
     {
         return Storage::delete($this->path());
     }
 
-    public static function findOrFail(string $client, string $name)
+    public static function findOrFail(string $client, string $name): self
     {
         if (!Storage::exists($client . DIRECTORY_SEPARATOR . $name)) {
-            return abort(404, 'File not found');
+            abort(404, 'File not found');
         }
 
         return new self($client, $name);
     }
 
-    public static function save(string $file, string $client, bool $private = false)
+    public static function save(string $file, string $client, bool $private = false): self
     {
         $file = Storage::putFile($client, $file, $private ? 'private' : 'public');
 

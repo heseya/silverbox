@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\File;
 use App\Http\Resources\FileResource;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -19,9 +19,9 @@ class UploadController extends BaseController
      *
      * @throws Exception
      *
-     * @return AnonymousResourceCollection
+     * @return JsonResponse
      */
-    public function upload(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $files = [];
 
@@ -30,7 +30,7 @@ class UploadController extends BaseController
                 $file = File::save(
                     $uploaded,
                     $request->client->name,
-                    (isset($request->private) && $request->private !== 'false'),
+                    ($request->has('private') && $request->private !== 'false'),
                 );
 
                 if (!Storage::exists($file->path())) {
@@ -41,6 +41,6 @@ class UploadController extends BaseController
             });
         }
 
-        return FileResource::collection($files);
+        return FileResource::collection($files)->response();
     }
 }
