@@ -25,7 +25,7 @@ class File
         return Storage::getVisibility($this->path());
     }
 
-    public function mimeType(): bool|string
+    public function mimeType(): bool | string
     {
         return Storage::mimeType($this->path());
     }
