@@ -17,4 +17,4 @@ jobs:
         with:
           doc: <BUMP_DOC_ID>
           token: ${{secrets.BUMP_TOKEN}}
-          file: doc/api-documentation.yml
+          file: docs/openapi.yml
