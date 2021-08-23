@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:8.0-apache
 
 RUN apt-get update && apt-get install -y \
     libc-client-dev \
@@ -10,12 +10,6 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip
-
-RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl
-RUN docker-php-ext-install imap
-
-RUN docker-php-ext-install pdo_mysql
-RUN docker-php-ext-install soap
 
 RUN docker-php-ext-configure gd --with-jpeg
 RUN docker-php-ext-install gd
