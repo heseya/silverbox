@@ -2,7 +2,9 @@
 
 use App\Client;
 use App\File;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Testing\TestResponse;
 use Laravel\Lumen\Application;
 
 abstract class TestCase extends Laravel\Lumen\Testing\TestCase
@@ -11,6 +13,7 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
 
     public File $file;
     public File $filePrivate;
+    public File $fileSvg;
 
     /**
      * Creates the application.
@@ -33,5 +36,13 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
 
         $this->file = File::save(__DIR__ . '/files/image.jpeg', 'test', false);
         $this->filePrivate = File::save(__DIR__ . '/files/image.jpeg', 'test', true);
+        $this->fileSvg = File::save(__DIR__ . '/files/image.svg', 'test', false);
+    }
+
+    public function send(string $method, string $uri, array $parameters = [], array $headers = []): Response|TestResponse
+    {
+        $server = $this->transformHeadersToServerVars($headers);
+
+        return $this->call($method, $uri, $parameters, [], [], $server);
     }
 }
