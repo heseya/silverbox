@@ -50,13 +50,18 @@ class File
         return Storage::delete($this->path());
     }
 
-    public static function findOrFail(string $client, string $name): self
+    public static function find(string $client, string $name): self|bool
     {
-        if (!Storage::exists($client . DIRECTORY_SEPARATOR . $name)) {
-            abort(404, 'File not found');
+        if (Storage::exists($client . DIRECTORY_SEPARATOR . $name)) {
+            return new self($client, $name);
         }
 
-        return new self($client, $name);
+        return false;
+    }
+
+    public static function findOrFail(string $client, string $name): self
+    {
+        return self::find($client, $name) ?: abort(404, 'File not found');
     }
 
     public static function save(string $file, string $client, bool $private = false): self

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Storage;
 
 class DeleteTest extends TestCase
 {
-    public function testCantViewUnauthorized(): void
+    public function testCantDeleteUnauthorized(): void
     {
         $this->json('DELETE', '/test/' . $this->file->name);
 
@@ -13,7 +13,7 @@ class DeleteTest extends TestCase
         Storage::assertExists($this->file->path());
     }
 
-    public function testViewInfo(): void
+    public function testDelete(): void
     {
         $this->json('DELETE', '/test/' . $this->file->name, [], ['x-api-key' => $this->client->key]);
 

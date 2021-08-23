@@ -9,6 +9,13 @@ class ViewTest extends TestCase
         $this->assertResponseOk();
     }
 
+    public function testNotFound(): void
+    {
+        $this->get('/test/not-found-file.jpeg');
+
+        $this->assertResponseStatus(404);
+    }
+
     public function testCantViewPrivateFile(): void
     {
         $this->get('/test/' . $this->filePrivate->name);
