@@ -5,17 +5,22 @@ use Illuminate\Http\UploadedFile;
 
 class UploadTest extends TestCase
 {
+    public UploadedFile $uploadedFile;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->uploadedFile = UploadedFile::fake()->image('test.jpg');
+    }
+
     public function testUploadPublicFile(): void
     {
-        $client = new Client('test');
-        $client->save();
-
-        $file = UploadedFile::fake()->image('test.jpg');
-
-        $this->post(
+        $this->json(
+            'POST',
             '/test',
-            ['file' => $file],
-            ['x-api-key' => $client->key],
+            ['file' => $this->uploadedFile],
+            ['x-api-key' => $this->client->key],
         );
 
         $this->assertResponseOk();
@@ -23,15 +28,11 @@ class UploadTest extends TestCase
 
     public function testUploadPrivateFile(): void
     {
-        $client = new Client('test');
-        $client->save();
-
-        $file = UploadedFile::fake()->image('test.jpg');
-
-        $this->post(
+        $this->json(
+            'POST',
             '/test?private',
-            ['file' => $file],
-            ['x-api-key' => $client->key],
+            ['file' => $this->uploadedFile],
+            ['x-api-key' => $this->client->key],
         );
 
         $this->assertResponseOk();
@@ -39,11 +40,10 @@ class UploadTest extends TestCase
 
     public function testUploadUnauthorized(): void
     {
-        $file = UploadedFile::fake()->image('test.jpg');
-
-        $this->post(
+        $this->json(
+            'POST',
             '/test',
-            ['file' => $file],
+            ['file' => $this->uploadedFile],
         );
 
         $this->assertResponseStatus(401);
@@ -51,18 +51,14 @@ class UploadTest extends TestCase
 
     public function testUploadToOtherClient(): void
     {
-        $client = new Client('heseya');
-        $client->save();
+        $otherClient = new Client('heseya');
+        $otherClient->save();
 
-        $client = new Client('test');
-        $client->save();
-
-        $file = UploadedFile::fake()->image('test.jpg');
-
-        $this->post(
+        $this->json(
+            'POST',
             '/heseya',
-            ['file' => $file],
-            ['x-api-key' => $client->key],
+            ['file' => $this->uploadedFile],
+            ['x-api-key' => $this->client->key],
         );
 
         $this->assertResponseStatus(401);

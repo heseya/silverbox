@@ -25,7 +25,6 @@ class ViewController extends BaseController
     {
         $file = File::findOrFail($client, $fileName);
 
-        // Private file
         if ($file->visibility() !== 'public') {
             Client::loginOrFail($request->client, $request->header('x-api-key'));
         }
