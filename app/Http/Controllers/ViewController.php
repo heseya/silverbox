@@ -15,10 +15,9 @@ class ViewController extends BaseController
     /**
      * Files view.
      *
-     * @param Request $request
-     * @param string $client
-     * @param string $fileName
-     *
+     * @param  Request  $request
+     * @param  string  $client
+     * @param  string  $fileName
      * @return Response
      */
     public function show(Request $request, string $client, string $fileName): Response

@@ -15,11 +15,10 @@ class UploadController extends BaseController
     /**
      * Files upload.
      *
-     * @param Request $request
+     * @param  Request  $request
+     * @return JsonResponse
      *
      * @throws Exception
-     *
-     * @return JsonResponse
      */
     public function store(Request $request): JsonResponse
     {

@@ -4,8 +4,8 @@ namespace App\Console;
 
 use App\Console\Commands\ClientsAdd;
 use App\Console\Commands\ClientsRemove;
-use App\Console\Commands\ClientsTruncate;
 use App\Console\Commands\ClientsShow;
+use App\Console\Commands\ClientsTruncate;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel

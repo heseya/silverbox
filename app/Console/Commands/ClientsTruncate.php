@@ -35,6 +35,7 @@ class ClientsTruncate extends Command
 
         if (!Storage::exists($name)) {
             $this->error('Client does not exist!');
+
             return;
         }
 
