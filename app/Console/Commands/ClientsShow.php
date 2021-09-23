@@ -45,6 +45,6 @@ class ClientsShow extends Command
             ];
         }
 
-        $this->table(['client', 'usage', 'key'], $clients);
+        $this->table(['client', 'usage', 'active'], $clients);
     }
 }
