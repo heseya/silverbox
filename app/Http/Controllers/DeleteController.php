@@ -11,9 +11,8 @@ class DeleteController extends BaseController
     /**
      * Files remove.
      *
-     * @param string $client
-     * @param string $fileName
-     *
+     * @param  string  $client
+     * @param  string  $fileName
      * @return JsonResponse
      */
     public function destroy(string $client, string $fileName): JsonResponse

@@ -12,9 +12,8 @@ class InfoController extends BaseController
     /**
      * View info about file.
      *
-     * @param string $client
-     * @param string $fileName
-     *
+     * @param  string  $client
+     * @param  string  $fileName
      * @return JsonResponse
      */
     public function info(string $client, string $fileName): JsonResponse

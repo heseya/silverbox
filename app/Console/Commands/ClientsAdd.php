@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Client;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 class ClientsAdd extends Command
 {
@@ -12,7 +13,7 @@ class ClientsAdd extends Command
      *
      * @var string
      */
-    protected $signature = 'clients:add {name?}';
+    protected $signature = 'clients:add {name}';
 
     /**
      * The console command description.
@@ -28,13 +29,9 @@ class ClientsAdd extends Command
      */
     public function handle(): void
     {
-        if (empty($this->argument('name'))) {
-            $this->error('You must provide a name!');
+        $name = Str::lower($this->argument('name'));
 
-            return;
-        }
-
-        $client = new Client($this->argument('name'));
+        $client = new Client($name);
 
         if (!$client->save()) {
             $this->error('Something went wrong!');
