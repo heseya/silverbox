@@ -28,7 +28,7 @@ class ViewController extends BaseController
             Client::loginOrFail($request->client, $request->header('x-api-key'));
         }
 
-        if ($file->mimeType() !== 'image/svg+xml' && ($request->has('w') || $request->has('h'))) {
+        if ($request->hasAny(['w', 'h']) && $file->isSupported()) {
             $ext = pathinfo($fileName, PATHINFO_EXTENSION);
             $fileName = pathinfo($fileName, PATHINFO_FILENAME);
 
