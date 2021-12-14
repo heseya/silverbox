@@ -8,11 +8,12 @@
 ## Requirements
 SSH access to a server with **PHP 8.0+** and [Composer](https://getcomposer.org/).
 
-## Instalation
+## Installation
 ```
-composer create-project heseya/silverbox -s dev
+composer create-project heseya/silverbox
 ```
 
+## CLI
 Create API client
 ```
 php silverbox clients:add {clientName}
@@ -21,6 +22,16 @@ php silverbox clients:add {clientName}
 Show list of all clients
 ```
 php silverbox clients:show
+```
+
+Remove API client
+```
+php silverbox clients:remove {name} {--f|with-files}
+```
+
+Remove all client files
+```
+php silverbox clients:truncate {name}
 ```
 
 ## License
