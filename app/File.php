@@ -35,6 +35,17 @@ class File
         return Storage::lastModified($this->path());
     }
 
+    public function isSupported(): bool
+    {
+        return in_array($this->mimeType(), [
+            'image/webp',
+            'image/jpeg',
+            'image/png',
+            'image/gif',
+            'image/bmp',
+        ]);
+    }
+
     public function size(): int
     {
         return Storage::size($this->path());
