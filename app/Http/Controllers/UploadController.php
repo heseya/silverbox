@@ -7,6 +7,7 @@ use App\Http\Resources\FileResource;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -33,7 +34,7 @@ class UploadController extends BaseController
                 );
 
                 if (!Storage::exists($file->path())) {
-                    throw new Exception('File cannot be uploaded.');
+                    App::abort(400, 'File cannot be uploaded.');
                 }
 
                 return $file;
