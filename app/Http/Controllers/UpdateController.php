@@ -13,10 +13,9 @@ use Laravel\Lumen\Routing\Controller;
 class UpdateController extends Controller
 {
     /**
-     * @param string $client
-     * @param string $fileName
-     * @param Request $request
-     *
+     * @param  string  $client
+     * @param  string  $fileName
+     * @param  Request  $request
      * @return JsonResource
      */
     public function update(string $client, string $fileName, Request $request): JsonResource
