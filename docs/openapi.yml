@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Silverbox API
-  version: 1.0.0
+  version: 1.1.0
   license:
     name: MIT
 
@@ -40,7 +40,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /{client}/{file}:
     parameters:
@@ -77,6 +77,32 @@ paths:
       responses:
         '200':
           description: Binary file.
+    patch:
+      summary: Ability to change file path
+      operationId: file-update
+      tags:
+        - Files
+      security:
+        - bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - slug
+              properties:
+                slug:
+                  description: 'New file name'
+                  type: string
+                  example: 'new-file-name'
+      responses:
+        '200':
+          description: Info about file
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
     delete:
       summary: Delete a file
       operationId: file-delete
@@ -123,23 +149,37 @@ components:
   schemas:
     File:
       type: object
-      required:
-        - id
       properties:
-        id:
+        name:
           type: string
-          example: '3e2S49ZlOoRqxcUJsK8qwNBbH9eGjSym'
+          example: '8BgXSCaMZae9auk1kVA9tRP2Km1CzvKsyE8ml8R0.jpg'
         owner:
           type: string
           example: 'client'
+        visibility:
+          type: string
+          example: 'public'
         path:
           type: string
-          example: 'client/3e2S49ZlOoRqxcUJsK8qwNBbH9eGjSym'
+          example: 'client/8BgXSCaMZae9auk1kVA9tRP2Km1CzvKsyE8ml8R0.jpg'
+        mime:
+          type: string
+          example: 'image/jpeg'
+        size:
+          type: number
+          example: 142083
+        lastModified:
+          type: number
+          example: 1640104826
     Error:
       type: object
       properties:
         message:
           type: string
+          example: 'An error occurred.'
+        code:
+          type: number
+          example: 500
   securitySchemes:
     bearer:
       type: http

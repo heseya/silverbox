@@ -37,8 +37,6 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
         $this->file = File::save(__DIR__ . '/files/image.jpeg', 'test', false);
         $this->filePrivate = File::save(__DIR__ . '/files/image.jpeg', 'test', true);
         $this->fileSvg = File::save(__DIR__ . '/files/image.svg', 'test', false);
-
-        sleep(1);
     }
 
     public function send(string $method, string $uri, array $parameters = [], array $headers = []): Response|TestResponse

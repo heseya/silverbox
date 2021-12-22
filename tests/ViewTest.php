@@ -26,7 +26,7 @@ class ViewTest extends TestCase
 
     public function testCantViewPrivateFile(): void
     {
-        $this->call('GET', '/test/' . $this->filePrivate->name);
+        $this->send('GET', '/test/' . $this->filePrivate->name);
 
         $this->assertResponseStatus(401);
     }
@@ -40,7 +40,7 @@ class ViewTest extends TestCase
 
     public function testCantViewUserKey(): void
     {
-        $this->call('GET', '/test/.key');
+        $this->send('GET', '/test/.key');
 
         $this->assertResponseStatus(401);
     }

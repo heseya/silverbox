@@ -30,6 +30,11 @@ class File
         return Storage::mimeType($this->path());
     }
 
+    public function extension(): string
+    {
+        return pathinfo($this->path(), PATHINFO_EXTENSION);
+    }
+
     public function lastModified(): int
     {
         return Storage::lastModified($this->path());
@@ -59,6 +64,14 @@ class File
     public function delete(): bool
     {
         return Storage::delete($this->path());
+    }
+
+    public function move($slug): void
+    {
+        $slug .= '.' . $this->extension();
+        Storage::move($this->path(), $this->owner . DIRECTORY_SEPARATOR . $slug);
+
+        $this->name = $slug;
     }
 
     public static function find(string $client, string $name): self|bool
