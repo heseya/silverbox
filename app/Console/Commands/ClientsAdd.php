@@ -13,7 +13,7 @@ class ClientsAdd extends Command
      *
      * @var string
      */
-    protected $signature = 'clients:add {name}';
+    protected $signature = 'clients:add {name} {key?}';
 
     /**
      * The console command description.
@@ -31,7 +31,7 @@ class ClientsAdd extends Command
     {
         $name = Str::lower($this->argument('name'));
 
-        $client = new Client($name);
+        $client = new Client($name, $this->argument('key'));
 
         if (!$client->save()) {
             $this->error('Something went wrong!');
