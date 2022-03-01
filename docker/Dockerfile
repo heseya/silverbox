@@ -1,0 +1,27 @@
+FROM php:8.0-apache
+WORKDIR /usr/src/app
+ENV APACHE_DOCUMENT_ROOT /usr/src/app/public
+
+RUN a2enmod rewrite
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+RUN apt-get update && apt-get install -y \
+    libc-client-dev \
+    libkrb5-dev \
+    libpng-dev \
+    libjpeg-dev \
+    zlib1g-dev \
+    libzip-dev \
+    libxml2-dev \
+    zip \
+    unzip
+
+RUN docker-php-ext-configure gd --with-jpeg && docker-php-ext-install gd
+RUN docker-php-ext-install bcmath
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+COPY . ./
+
+RUN composer i
+RUN chown -R www-data:www-data *
