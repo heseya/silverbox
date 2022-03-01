@@ -8,12 +8,10 @@ use Illuminate\Support\Str;
 
 class Client
 {
-    public string $name;
     public string $key;
 
-    public function __construct(string $name, ?string $key = null)
+    public function __construct(public string $name, ?string $key = null)
     {
-        $this->name = $name;
         $this->key = $key ?? $this->generateKey();
     }
 
