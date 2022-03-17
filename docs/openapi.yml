@@ -1,9 +1,43 @@
 openapi: 3.0.0
 info:
-  title: Silverbox API
-  version: 1.1.0
+  title: Silverbox
+  version: 1.2.1
   license:
     name: MIT
+    url: https://github.com/heseya/silverbox/blob/master/LICENSE
+  description: >
+    ## CLI
+
+    ### Create API client
+
+    This command creates a new api token.
+
+
+    ```
+    php silverbox clients:add {clientName}
+    ```
+
+    ### Show list of all clients
+
+    ```
+    php silverbox clients:show
+    ```
+
+    ### Remove API client
+
+    ```
+    php silverbox clients:remove {name} {-f|--with-files}
+    ```
+
+    ### Remove all client files
+
+    ```
+    php silverbox clients:truncate {name}
+    ```
+
+externalDocs:
+  url: https://github.com/heseya/silverbox
+  description: GitHub
 
 paths:
   /{client}:
@@ -14,34 +48,45 @@ paths:
         description: Client name
         schema:
           type: string
-      - name: private
-        in: query
-        required: false
-        schema:
-          type: boolean
     post:
       summary: Upload a file
       operationId: file-upload
       tags:
         - Files
       security:
-        - bearer: []
+        - apiKey: []
+      parameters:
+        - name: private
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Flag that determines the visibility of the file.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: You can use any name you like and send as many files as you like at once.
       responses:
         '201':
-          description: Expected response to a valid request
+          description: File successfully uploaded
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/File'
-        default:
-          description: unexpected error
+        '500':
+          description: Unexpected error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-
   /{client}/{file}:
     parameters:
       - name: client
@@ -72,18 +117,25 @@ paths:
             type: number
       summary: Get a file
       operationId: file-get
+      description: If you want to download a private file, you must use the default header for authentication.
       tags:
         - Files
       responses:
         '200':
-          description: Binary file.
+          description: Binary file
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     patch:
-      summary: Ability to change file path
+      summary: Change file path
       operationId: file-update
       tags:
         - Files
       security:
-        - bearer: []
+        - apiKey: []
       requestBody:
         content:
           application/json:
@@ -93,9 +145,9 @@ paths:
                 - slug
               properties:
                 slug:
-                  description: 'New file name'
+                  description: New file name
                   type: string
-                  example: 'new-file-name'
+                  example: new-file-name
       responses:
         '200':
           description: Info about file
@@ -103,17 +155,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/File'
+        '500':
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       summary: Delete a file
       operationId: file-delete
       tags:
         - Files
       security:
-        - bearer: []
+        - apiKey: []
       responses:
         '204':
-          description: File successfully deleted.
-
+          description: File successfully deleted
+        '500':
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /{client}/{file}/info:
     parameters:
       - name: client
@@ -134,7 +197,7 @@ paths:
       tags:
         - Files
       security:
-        - bearer: []
+        - apiKey: []
       responses:
         '200':
           description: Info about file
@@ -144,7 +207,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/File'
-
+        '500':
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     File:
@@ -155,32 +223,39 @@ components:
           example: '8BgXSCaMZae9auk1kVA9tRP2Km1CzvKsyE8ml8R0.jpg'
         owner:
           type: string
-          example: 'client'
+          example: client
         visibility:
           type: string
-          example: 'public'
+          enum:
+            - public
+            - private
+          example: public
         path:
           type: string
           example: 'client/8BgXSCaMZae9auk1kVA9tRP2Km1CzvKsyE8ml8R0.jpg'
+          description: 'file path without domain'
         mime:
           type: string
           example: 'image/jpeg'
         size:
           type: number
           example: 142083
+          description: 'size of a file in bytes'
         lastModified:
           type: number
           example: 1640104826
+          description: 'UNIX timestamp of the last time the file was modified'
     Error:
       type: object
       properties:
         message:
           type: string
-          example: 'An error occurred.'
+          example: An error occurred.
         code:
           type: number
           example: 500
   securitySchemes:
-    bearer:
-      type: http
-      scheme: bearer
+    apiKey:
+      type: apiKey
+      in: header
+      name: x-api-key
