@@ -63,7 +63,7 @@ class ViewController extends BaseController
     private function stream(Request $request, File $file): Response|StreamedResponse
     {
         ob_get_clean();
-        $buffer = 102400;
+        $buffer = 131072; // 128 KiB = 32 * 4096 bytes (standard disk allocation size)
         $streamPointer = $file->stream();
         $start = 0;
         $size = filesize($file->absolutePath());
@@ -71,51 +71,44 @@ class ViewController extends BaseController
         $dynamicHeaders = [];
 
         if ($request->server('HTTP_RANGE')) {
-            $request_start = $start;
             $request_end = $end;
 
             [, $range] = explode('=', $request->server('HTTP_RANGE'), 2);
 
-            if ($range === '-') {
-                $request_start = $size - substr($range, 1);
-            } else {
+            if ($range !== '-') {
                 $range = explode('-', $range);
-                $request_start = $range[0];
+                $start = $range[0];
 
                 $request_end = (isset($range[1]) && is_numeric($range[1])) ? $range[1] : $request_end;
             }
             $request_end = ($request_end > $end) ? $end : $request_end;
 
-            $start = $request_start;
             $end = $request_end;
 
             fseek($streamPointer, $start);
             $dynamicHeaders['Content-Length'] = $end - $start + 1;
-            $dynamicHeaders['Content-Range'] = "bytes $start-$end/$size";
+            $dynamicHeaders['Content-Range'] = "bytes {$start}-{$end}/{$size}";
         } else {
             $dynamicHeaders['Content-Length'] = $size;
         }
 
         return response()->stream(
             function () use ($streamPointer, $buffer, $start, $end) {
-                $i = $start;
                 set_time_limit(0);
-                while (!feof($streamPointer) && $i <= $end) {
+                while (!feof($streamPointer) && ftell($streamPointer) <= $end) {
                     $bytesToRead = $buffer;
-                    if (($i + $bytesToRead) > $end) {
-                        $bytesToRead = $end - $i + 1;
+                    if ((ftell($streamPointer) + $bytesToRead) > $end) {
+                        $bytesToRead = $end - ftell($streamPointer) + 1;
                     }
-                    $data = fread($streamPointer, $bytesToRead);
-                    echo $data;
+                    echo fread($streamPointer, $bytesToRead);
                     flush();
-                    $i += $bytesToRead;
                 }
             },
             Response::HTTP_PARTIAL_CONTENT,
             array_merge(
                 $dynamicHeaders,
                 [
-                    'Accept-Ranges' => '0-' . $end,
+                    'Accept-Ranges' => "0-{$end}",
                     'Content-Type' => $file->mimeType(),
                 ]
             )
