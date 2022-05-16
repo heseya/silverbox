@@ -93,7 +93,7 @@ class ViewController extends BaseController
         }
 
         return response()->stream(
-            function () use ($streamPointer, $buffer, $start, $end) {
+            function () use ($streamPointer, $buffer , $end) {
                 set_time_limit(0);
                 while (!feof($streamPointer) && ftell($streamPointer) <= $end) {
                     $bytesToRead = $buffer;
