@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Laravel\Lumen\Routing\Controller as BaseController;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewController extends BaseController
 {
@@ -20,7 +21,7 @@ class ViewController extends BaseController
      * @param  string  $fileName
      * @return Response
      */
-    public function show(Request $request, string $client, string $fileName): Response
+    public function show(Request $request, string $client, string $fileName): Response | StreamedResponse
     {
         $file = File::findOrFail($client, $fileName);
 
@@ -53,8 +54,71 @@ class ViewController extends BaseController
             $file = $cached;
         }
 
-        return response($file->binary())
-            ->header('Content-Type', $file->mimeType())
-            ->header('Cache-Control', 'public, max-age=' . env('CACHE_TIME', 15552000)); // default 6 months
+        return $file->isStreamable() ? $this->stream($request, $file)
+            : response($file->binary())
+                ->header('Content-Type', $file->mimeType())
+                ->header('Cache-Control', 'public, max-age=' . env('CACHE_TIME', 15552000)); // default 6 months
+    }
+
+    private function stream(Request $request, File $file): Response | StreamedResponse
+    {
+        ob_get_clean();
+        $buffer = 102400;
+        $streamPointer = $file->stream();
+        $start = 0;
+        $size = filesize($file->absolutePath());
+        $end = $size - 1;
+        $dynamicHeaders = [];
+
+        if ($request->server('HTTP_RANGE')) {
+            $request_start = $start;
+            $request_end = $end;
+
+            list(, $range) = explode('=', $request->server('HTTP_RANGE'), 2);
+
+            if ($range === '-') {
+                $request_start = $size - substr($range, 1);
+            } else {
+                $range = explode('-', $range);
+                $request_start = $range[0];
+
+                $request_end = (isset($range[1]) && is_numeric($range[1])) ? $range[1] : $request_end;
+            }
+            $request_end = ($request_end > $end) ? $end : $request_end;
+
+            $start = $request_start;
+            $end = $request_end;
+
+            fseek($streamPointer, $start);
+            $dynamicHeaders['Content-Length'] = $end - $start + 1;
+            $dynamicHeaders['Content-Range'] = "bytes $start-$end/$size";
+        } else {
+            $dynamicHeaders['Content-Length'] = $size;
+        }
+
+        return response()->stream(
+            function () use ($streamPointer, $buffer, $start, $size, $end) {
+                $i = $start;
+                set_time_limit(0);
+                while (!feof($streamPointer) && $i <= $end) {
+                    $bytesToRead = $buffer;
+                    if (($i + $bytesToRead) > $end) {
+                        $bytesToRead = $end - $i + 1;
+                    }
+                    $data = fread($streamPointer, $bytesToRead);
+                    echo $data;
+                    flush();
+                    $i += $bytesToRead;
+                }
+            },
+            Response::HTTP_PARTIAL_CONTENT,
+            array_merge(
+                $dynamicHeaders,
+                [
+                    'Accept-Ranges' => '0-' . $end,
+                    'Content-Type' => $file->mimeType(),
+                ]
+            )
+        );
     }
 }

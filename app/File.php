@@ -51,6 +51,22 @@ class File
         ]);
     }
 
+    public function isStreamable(): bool
+    {
+        return in_array($this->mimeType(), [
+            'video/avi',
+            'video/divx',
+            'video/mp4',
+            'video/mp4v-es',
+            'video/mpeg',
+            'video/mpeg-system',
+            'video/quicktime',
+            'video/webm',
+            'video/x-avi',
+            'video/x-mpeg2',
+        ]);
+    }
+
     public function size(): int
     {
         return Storage::size($this->path());
@@ -59,6 +75,16 @@ class File
     public function binary(): string
     {
         return Storage::get($this->path());
+    }
+
+    public function stream()
+    {
+        return Storage::readStream($this->path());
+    }
+
+    public function absolutePath(): string
+    {
+        return Storage::path($this->path());
     }
 
     public function delete(): bool
