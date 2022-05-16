@@ -21,7 +21,7 @@ class ViewController extends BaseController
      * @param  string  $fileName
      * @return Response
      */
-    public function show(Request $request, string $client, string $fileName): Response | StreamedResponse
+    public function show(Request $request, string $client, string $fileName): Response|StreamedResponse
     {
         $file = File::findOrFail($client, $fileName);
 
@@ -60,7 +60,7 @@ class ViewController extends BaseController
                 ->header('Cache-Control', 'public, max-age=' . env('CACHE_TIME', 15552000)); // default 6 months
     }
 
-    private function stream(Request $request, File $file): Response | StreamedResponse
+    private function stream(Request $request, File $file): Response|StreamedResponse
     {
         ob_get_clean();
         $buffer = 102400;
@@ -74,7 +74,7 @@ class ViewController extends BaseController
             $request_start = $start;
             $request_end = $end;
 
-            list(, $range) = explode('=', $request->server('HTTP_RANGE'), 2);
+            [, $range] = explode('=', $request->server('HTTP_RANGE'), 2);
 
             if ($range === '-') {
                 $request_start = $size - substr($range, 1);
@@ -97,7 +97,7 @@ class ViewController extends BaseController
         }
 
         return response()->stream(
-            function () use ($streamPointer, $buffer, $start, $size, $end) {
+            function () use ($streamPointer, $buffer, $start , $end) {
                 $i = $start;
                 set_time_limit(0);
                 while (!feof($streamPointer) && $i <= $end) {
