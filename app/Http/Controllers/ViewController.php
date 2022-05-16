@@ -97,7 +97,7 @@ class ViewController extends BaseController
         }
 
         return response()->stream(
-            function () use ($streamPointer, $buffer, $start , $end) {
+            function () use ($streamPointer, $buffer, $start, $end) {
                 $i = $start;
                 set_time_limit(0);
                 while (!feof($streamPointer) && $i <= $end) {
