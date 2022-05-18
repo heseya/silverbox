@@ -28,22 +28,30 @@ class ViewController extends BaseController
             Client::loginOrFail($client, $request->header('x-api-key'));
         }
 
-        if ($request->hasAny(['w', 'h']) && $file->isSupported()) {
-            $ext = pathinfo($fileName, PATHINFO_EXTENSION);
+        if ($request->hasAny(['w', 'h', 'format']) && $file->isSupported()) {
+            $ext = ($request->has('format') && $file->conversionSupported($request->input('format')))
+                ? $request->input('format') : pathinfo($fileName, PATHINFO_EXTENSION);
             $fileName = pathinfo($fileName, PATHINFO_FILENAME);
 
-            $size = '_' . ($request->has('w') ? 'w_' . $request->input('w') : '') .
+            $size = ($request->hasAny(['w', 'h']) ? '_' : '') .
+                ($request->has('w') ? 'w_' . $request->input('w') : '') .
                 ($request->has('h') ? 'h_' . $request->input('h') : '');
 
             $cacheName = 'cache' . DIRECTORY_SEPARATOR . $fileName . $size . '.' . $ext;
             $cached = File::find($client, $cacheName);
 
             if (!$cached) {
-                $image = Image::make($file->binary())
-                ->resize($request->input('w'), $request->input('h'), function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                })->encode();
+                $image = Image::make($file->binary());
+
+                if ($request->hasAny(['w', 'h'])) {
+                    $image = $image
+                        ->resize($request->input('w'), $request->input('h'), function ($constraint) {
+                            $constraint->aspectRatio();
+                            $constraint->upsize();
+                        });
+                }
+
+                $image = $image->encode($ext);
 
                 Storage::put($client . DIRECTORY_SEPARATOR . $cacheName, $image);
 
