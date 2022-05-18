@@ -1,4 +1,4 @@
-FROM php:8.0-apache
+FROM php:8.1-apache
 WORKDIR /usr/src/app
 ENV APACHE_DOCUMENT_ROOT /usr/src/app/public
 
@@ -11,13 +11,19 @@ RUN apt-get update && apt-get install -y \
     libkrb5-dev \
     libpng-dev \
     libjpeg-dev \
+    libwebp-dev \
+    libaom-dev \
+    libavif-dev \
     zlib1g-dev \
     libzip-dev \
     libxml2-dev \
     zip \
     unzip
 
-RUN docker-php-ext-configure gd --with-jpeg && docker-php-ext-install gd
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN chmod +x /usr/local/bin/install-php-extensions && \
+    install-php-extensions gd
+RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-avif
 RUN docker-php-ext-install bcmath
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
