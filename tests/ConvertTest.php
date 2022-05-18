@@ -14,7 +14,7 @@ class ConvertTest extends TestCase
         $this->assertEquals('image/webp', $returnedFileInfo['mime']);
     }
 
-    public function testViewFileAvif(): void
+    /*public function testViewFileAvif(): void
     {
         $response = $this->send('GET', '/test/' . $this->file->name, ['format' => 'avif']);
 
@@ -24,7 +24,7 @@ class ConvertTest extends TestCase
         $this->assertNotEquals(file_get_contents(__DIR__ . '/files/image.jpeg'), $response->getContent());
         $this->assertEquals('image/avif', $response->headers->get('Content-Type'));
         $this->assertEquals('image/avif', $returnedFileInfo['mime']);
-    }
+    }*/
 
     public function testNotSupportedFormat(): void
     {
