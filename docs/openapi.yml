@@ -115,6 +115,13 @@ paths:
           description: Width in px
           schema:
             type: number
+        - name: format
+          in: query
+          required: false
+          description: Format of the image
+          schema:
+            type: string
+            enum: [webp, avif]
       summary: Get a file
       operationId: file-get
       description: If you want to download a private file, you must use the default header for authentication.
