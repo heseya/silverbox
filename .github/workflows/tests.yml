@@ -2,14 +2,11 @@ name: Tests
 on: [push]
 jobs:
   laravel-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-21.04
     steps:
-      - name: Install libavif
-        run: sudo apt-get install -y libavif-dev
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-          extensions: gd --with-jpeg --with-webp --with-avif
       - uses: actions/checkout@v2
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
