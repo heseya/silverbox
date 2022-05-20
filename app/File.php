@@ -67,6 +67,14 @@ class File
         ]);
     }
 
+    public function conversionSupported(string $format): bool
+    {
+        return in_array($format, [
+            'avif',
+            'webp',
+        ]);
+    }
+
     public function size(): int
     {
         return Storage::size($this->path());
