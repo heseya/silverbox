@@ -14,6 +14,7 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
     public File $file;
     public File $filePrivate;
     public File $fileSvg;
+    public File $fileVideo;
 
     /**
      * Creates the application.
@@ -37,6 +38,7 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
         $this->file = File::save(__DIR__ . '/files/image.jpeg', 'test', false);
         $this->filePrivate = File::save(__DIR__ . '/files/image.jpeg', 'test', true);
         $this->fileSvg = File::save(__DIR__ . '/files/image.svg', 'test', false);
+        $this->fileVideo = File::save(__DIR__ . '/files/video.mp4', 'test', false);
     }
 
     public function send(string $method, string $uri, array $parameters = [], array $headers = []): Response|TestResponse

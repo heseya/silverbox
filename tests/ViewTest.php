@@ -44,4 +44,14 @@ class ViewTest extends TestCase
 
         $this->assertResponseStatus(401);
     }
+
+    public function testVideoAsPartialContent(): void
+    {
+        ob_start();
+        $response = $this->send('GET', '/test/' . $this->fileVideo->name);
+        $this->assertEquals(file_get_contents(__DIR__ . '/files/video.mp4'), $response->streamedContent());
+
+        $this->assertResponseStatus(206);
+        ob_flush();
+    }
 }
