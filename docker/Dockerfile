@@ -1,33 +1,4 @@
-FROM php:8.1-apache
-WORKDIR /usr/src/app
-ENV APACHE_DOCUMENT_ROOT /usr/src/app/public
-
-RUN a2enmod rewrite
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
-RUN apt-get update && apt-get install -y \
-    libc-client-dev \
-    libkrb5-dev \
-    libpng-dev \
-    libjpeg-dev \
-    libwebp-dev \
-    libaom-dev \
-    libavif-dev \
-    zlib1g-dev \
-    libzip-dev \
-    libxml2-dev \
-    zip \
-    unzip
-
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-RUN chmod +x /usr/local/bin/install-php-extensions && \
-    install-php-extensions gd
-RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-avif
-RUN docker-php-ext-install bcmath
-
-COPY --from=composer /usr/bin/composer /usr/bin/composer
-COPY . ./
-
+FROM escolasoft/php:8.1-nginx
+ADD . /var/www/html
 RUN composer i
 RUN chown -R www-data:www-data *
