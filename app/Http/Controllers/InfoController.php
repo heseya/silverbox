@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\File;
 use App\Http\Resources\FileResource;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class InfoController extends BaseController
@@ -21,5 +22,11 @@ class InfoController extends BaseController
         $file = File::findOrFail($client, $fileName);
 
         return FileResource::make($file)->response();
+    }
+
+    public function robots(): Response
+    {
+        return response("User-agent: *\ndisallow: /", Response::HTTP_OK)
+            ->header('Content-Type', 'text/plain; charset=UTF-8');
     }
 }

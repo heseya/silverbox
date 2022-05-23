@@ -19,3 +19,5 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 });
 
 $router->get('{client}/{fileName}', 'ViewController@show');
+
+$router->get('robots.txt', 'InfoController@robots');
