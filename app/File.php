@@ -72,6 +72,8 @@ class File
         return in_array($format, [
             'avif',
             'webp',
+            'jpeg',
+            'png',
         ]);
     }
 

@@ -26,6 +26,30 @@ class ConvertTest extends TestCase
         $this->assertEquals('image/avif', $returnedFileInfo['mime']);
     }*/
 
+    public function testViewFilePng(): void
+    {
+        $response = $this->send('GET', '/test/' . $this->file->name, ['format' => 'png']);
+
+        $this->assertResponseOk();
+        $returnedFileInfo = getimagesizefromstring($response->getContent());
+
+        $this->assertNotEquals(file_get_contents(__DIR__ . '/files/image.jpeg'), $response->getContent());
+        $this->assertEquals('image/png', $response->headers->get('Content-Type'));
+        $this->assertEquals('image/png', $returnedFileInfo['mime']);
+    }
+
+    public function testViewFileJpeg(): void
+    {
+        $response = $this->send('GET', '/test/' . $this->filePng->name, ['format' => 'jpeg']);
+
+        $this->assertResponseOk();
+        $returnedFileInfo = getimagesizefromstring($response->getContent());
+
+        $this->assertNotEquals(file_get_contents(__DIR__ . '/files/image.jpeg'), $response->getContent());
+        $this->assertEquals('image/jpeg', $response->headers->get('Content-Type'));
+        $this->assertEquals('image/jpeg', $returnedFileInfo['mime']);
+    }
+
     public function testNotSupportedFormat(): void
     {
         $response = $this->send('GET', '/test/' . $this->file->name, ['format' => 'exe']);
