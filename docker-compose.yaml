@@ -6,8 +6,7 @@ services:
       dockerfile: Dockerfile-dev
     restart: unless-stopped
     volumes:
-    - .:/var/www
-    - ./docker/nginx-app:/etc/nginx/conf.d
+    - .:/usr/src/app
     command:
     - bash
     - -c

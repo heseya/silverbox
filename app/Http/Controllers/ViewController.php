@@ -62,11 +62,13 @@ class ViewController extends BaseController
             $file = $cached;
         }
 
-        if (preg_match('/^nginx\/(\d+\.)?(\d+\.)?(\*|\d+)$/', $request->server('SERVER_SOFTWARE'))) {
-            return response(null)
-                ->header('X-Accel-Redirect', "/stream/{$file->path()}")
-                ->header('Content-Type', $file->mimeType());
-        }
+//         Disabled, doesn't work with partial content (iPhone video)
+//
+//         if (preg_match('/^nginx\/(\d+\.)?(\d+\.)?(\*|\d+)$/', $request->server('SERVER_SOFTWARE'))) {
+//             return response(null)
+//                 ->header('X-Accel-Redirect', "/stream/{$file->path()}")
+//                 ->header('Content-Type', $file->mimeType());
+//         }
 
         return $file->isStreamable() ? $this->stream($request, $file)
             : response($file->binary())
