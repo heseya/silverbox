@@ -16,9 +16,9 @@ class ViewController extends BaseController
     /**
      * Files view.
      *
-     * @param Request $request
-     * @param string $client
-     * @param string $fileName
+     * @param  Request  $request
+     * @param  string  $client
+     * @param  string  $fileName
      * @return Response|StreamedResponse
      */
     public function show(Request $request, string $client, string $fileName): Response|StreamedResponse
@@ -89,8 +89,8 @@ class ViewController extends BaseController
             // At least semi valid range header
             if ($unit === 'bytes' && $range !== '') {
                 // Only stream first range because mutlipart/byteranges is hard
-                [$firstRange] = explode(",", $range, 2);
-                [$rangeStart, $rangeEnd] = explode("-", $firstRange, 2) + ['', ''];
+                [$firstRange] = explode(',', $range, 2);
+                [$rangeStart, $rangeEnd] = explode('-', $firstRange, 2) + ['', ''];
 
                 // Proper data range calculation
                 if ($rangeStart !== '') {
@@ -101,7 +101,7 @@ class ViewController extends BaseController
                         // clamp range end between range start and end of file
                         $end = min($end, max($start, (int) $rangeEnd));
                     }
-                } else if ($rangeEnd !== '') {
+                } elseif ($rangeEnd !== '') {
                     // get range of last n bytes
                     $start = $size - (int) $rangeEnd;
                 }
@@ -132,7 +132,8 @@ class ViewController extends BaseController
         );
     }
 
-    private function cleanAllOutputBuffers() {
+    private function cleanAllOutputBuffers()
+    {
         while (ob_get_level()) {
             ob_end_clean();
         }
