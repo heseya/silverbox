@@ -1,4 +1,4 @@
-AddType application/x-httpd-php80 .php
+AddType application/x-httpd-php81 .php
 
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
