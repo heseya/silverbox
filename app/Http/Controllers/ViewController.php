@@ -19,7 +19,7 @@ class ViewController extends BaseController
      * @param  Request  $request
      * @param  string  $client
      * @param  string  $fileName
-     * @return Response
+     * @return Response|StreamedResponse
      */
     public function show(Request $request, string $client, string $fileName): Response|StreamedResponse
     {
@@ -68,58 +68,74 @@ class ViewController extends BaseController
                 ->header('Cache-Control', 'public, max-age=' . env('CACHE_TIME', 15552000)); // default 6 months
     }
 
-    private function stream(Request $request, File $file): Response|StreamedResponse
+    private function stream(Request $request, File $file): StreamedResponse
     {
-        ob_get_clean();
-        $buffer = 131072; // 128 KiB = 32 * 4096 bytes (standard disk allocation size)
+        $this->cleanAllOutputBuffers();
+
+        $bufferSize = 131072; // 128 KiB = 32 * 4096 bytes (standard disk allocation size)
         $streamPointer = $file->stream();
-        $start = 0;
         $size = filesize($file->absolutePath());
+        $start = 0;
         $end = $size - 1;
-        $dynamicHeaders = [];
+
+        $responseType = Response::HTTP_OK;
+        $dynamicHeaders = [
+            'Content-Length' => $size,
+        ];
 
         if ($request->server('HTTP_RANGE')) {
-            $request_end = $end;
+            [$unit, $range] = explode('=', $request->server('HTTP_RANGE'), 2) + ['', ''];
 
-            [, $range] = explode('=', $request->server('HTTP_RANGE'), 2);
+            // At least semi valid range header
+            if ($unit === 'bytes' && $range !== '') {
+                // Only stream first range because mutlipart/byteranges is hard
+                [$firstRange] = explode(',', $range, 2);
+                [$rangeStart, $rangeEnd] = explode('-', $firstRange, 2) + ['', ''];
 
-            if ($range !== '-') {
-                $range = explode('-', $range);
-                $start = $range[0];
+                // Proper data range calculation
+                if ($rangeStart !== '') {
+                    // clamp range start between 0 and end of file
+                    $start = min($end, max(0, (int) $rangeStart));
 
-                $request_end = (isset($range[1]) && is_numeric($range[1])) ? $range[1] : $request_end;
+                    if ($rangeEnd !== '') {
+                        // clamp range end between range start and end of file
+                        $end = min($end, max($start, (int) $rangeEnd));
+                    }
+                } elseif ($rangeEnd !== '') {
+                    // get range of last n bytes
+                    $start = $size - (int) $rangeEnd;
+                }
+
+                fseek($streamPointer, $start);
+                $dynamicHeaders = [
+                    'Content-Length' => $end - $start + 1,
+                    'Content-Range' => "bytes {$start}-{$end}/{$size}",
+                ];
+
+                $responseType = Response::HTTP_PARTIAL_CONTENT;
             }
-            $request_end = ($request_end > $end) ? $end : $request_end;
-
-            $end = $request_end;
-
-            fseek($streamPointer, $start);
-            $dynamicHeaders['Content-Length'] = $end - $start + 1;
-            $dynamicHeaders['Content-Range'] = "bytes {$start}-{$end}/{$size}";
-        } else {
-            $dynamicHeaders['Content-Length'] = $size;
         }
 
         return response()->stream(
-            function () use ($streamPointer, $buffer, $end) {
-                set_time_limit(0);
+            function () use ($streamPointer, $bufferSize, $end) {
                 while (!feof($streamPointer) && ftell($streamPointer) <= $end) {
-                    $bytesToRead = $buffer;
-                    if ((ftell($streamPointer) + $bytesToRead) > $end) {
-                        $bytesToRead = $end - ftell($streamPointer) + 1;
-                    }
-                    echo fread($streamPointer, $bytesToRead);
+                    echo fread($streamPointer, $bufferSize);
                     flush();
                 }
             },
-            Response::HTTP_PARTIAL_CONTENT,
-            array_merge(
-                $dynamicHeaders,
-                [
-                    'Accept-Ranges' => "0-{$end}",
-                    'Content-Type' => $file->mimeType(),
-                ]
-            )
+            $responseType,
+            $dynamicHeaders + [
+                'Accept-Ranges' => 'bytes',
+                'Content-Type' => $file->mimeType(),
+                'Cache-Control' => 'public, max-age=' . env('CACHE_TIME', 15552000),
+            ]
         );
+    }
+
+    private function cleanAllOutputBuffers()
+    {
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
     }
 }
