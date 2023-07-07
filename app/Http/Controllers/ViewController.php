@@ -23,6 +23,7 @@ class ViewController extends BaseController
      */
     public function show(Request $request, string $client, string $fileName): Response|StreamedResponse
     {
+        $fileName = rawurldecode($fileName);
         $file = File::findOrFail($client, $fileName);
 
         if ($file->visibility() !== 'public') {

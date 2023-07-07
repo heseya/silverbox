@@ -8,7 +8,7 @@
 📦 Simple file server powered by Lumen.
 
 ## Requirements
-SSH access to a server with **PHP 8.0+** and [Composer](https://getcomposer.org/).
+SSH access to a server with **PHP 8.1+** and [Composer](https://getcomposer.org/).
 
 ## Installation
 ```
