@@ -20,6 +20,7 @@ class UpdateController extends Controller
      */
     public function update(string $client, string $fileName, Request $request): JsonResource
     {
+        $fileName = rawurldecode($fileName);
         $validator = Validator::make($request->all(), [
             'slug' => ['required', 'string', 'alpha_dash', 'max:100'],
         ]);

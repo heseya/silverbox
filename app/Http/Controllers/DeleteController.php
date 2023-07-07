@@ -17,6 +17,7 @@ class DeleteController extends BaseController
      */
     public function destroy(string $client, string $fileName): JsonResponse
     {
+        $fileName = rawurldecode($fileName);
         $file = File::findOrFail($client, $fileName);
 
         $file->delete();
