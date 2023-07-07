@@ -18,6 +18,7 @@ class InfoController extends BaseController
      */
     public function info(string $client, string $fileName): JsonResponse
     {
+        $fileName = rawurldecode($fileName);
         $file = File::findOrFail($client, $fileName);
 
         return FileResource::make($file)->response();
