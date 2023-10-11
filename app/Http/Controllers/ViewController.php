@@ -7,6 +7,7 @@ use App\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -31,8 +32,7 @@ class ViewController extends BaseController
         }
 
         if ($request->hasAny(['w', 'h', 'format']) && $file->isSupported()) {
-            $ext = ($request->has('format') && $file->conversionSupported($request->input('format')))
-                ? $request->input('format') : pathinfo($fileName, PATHINFO_EXTENSION);
+            $ext = $this->prepareExtension($request, $file, $fileName);
             $fileName = pathinfo($fileName, PATHINFO_FILENAME);
 
             $size = ($request->hasAny(['w', 'h']) ? '_' : '') .
@@ -67,6 +67,31 @@ class ViewController extends BaseController
             : response($file->binary())
                 ->header('Content-Type', $file->mimeType())
                 ->header('Cache-Control', 'public, max-age=' . env('CACHE_TIME', 15552000)); // default 6 months
+    }
+
+    private function prepareExtension(Request $request, File $file, string $fileName): string
+    {
+        if ($request->has('format') && $file->conversionSupported($request->input('format'))) {
+            return match ($request->input('format')) {
+                'auto' => $this->autoExtension($request, $file, $fileName),
+                default => $request->input('format'),
+            };
+        }
+
+        return pathinfo($fileName, PATHINFO_EXTENSION);
+    }
+
+    private function autoExtension(Request $request, File $file, string $fileName): string
+    {
+        if ($file->isRaster() && $request->header('Accept')) {
+            foreach ($this->formatsPriority() as $format) {
+                if (Str::contains($request->header('Accept'), $format)) {
+                    return Str::afterLast($format, '/');
+                }
+            }
+        }
+
+        return pathinfo($fileName, PATHINFO_EXTENSION);
     }
 
     private function stream(Request $request, File $file): StreamedResponse
@@ -138,5 +163,15 @@ class ViewController extends BaseController
         while (ob_get_level()) {
             ob_end_clean();
         }
+    }
+
+    private function formatsPriority(): array
+    {
+        return [
+            'image/avif',
+            'image/webp',
+            'image/png',
+            'image/jpeg',
+        ];
     }
 }

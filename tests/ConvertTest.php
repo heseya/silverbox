@@ -64,4 +64,39 @@ class ConvertTest extends TestCase
 
         $this->assertResponseStatus(404);
     }
+
+    public function testViewFileAutoJpeg(): void
+    {
+        $response = $this->send('GET', '/test/' . $this->filePng->name, ['format' => 'auto'], ['Accept' => 'image/jpeg']);
+
+        $this->assertResponseOk();
+        $returnedFileInfo = getimagesizefromstring($response->getContent());
+
+        $this->assertNotEquals(file_get_contents(__DIR__ . '/files/image.jpeg'), $response->getContent());
+        $this->assertEquals('image/jpeg', $response->headers->get('Content-Type'));
+        $this->assertEquals('image/jpeg', $returnedFileInfo['mime']);
+    }
+
+    public function testViewFileAutoWebp(): void
+    {
+        $response = $this->send('GET', '/test/' . $this->file->name, ['format' => 'auto'], ['Accept' => 'image/jpeg,image/png,image/webp']);
+
+        $this->assertResponseOk();
+        $returnedFileInfo = getimagesizefromstring($response->getContent());
+
+        $this->assertNotEquals(file_get_contents(__DIR__ . '/files/image.jpeg'), $response->getContent());
+        $this->assertEquals('image/webp', $response->headers->get('Content-Type'));
+        $this->assertEquals('image/webp', $returnedFileInfo['mime']);
+    }
+
+    public function testViewFileAutoNotSupported(): void
+    {
+        $response = $this->send('GET', '/test/' . $this->file->name, ['format' => 'auto'], ['Accept' => 'image/gif']);
+
+        $this->assertResponseOk();
+        $returnedFileInfo = getimagesizefromstring($response->getContent());
+
+        $this->assertEquals('image/jpeg', $response->headers->get('Content-Type'));
+        $this->assertEquals('image/jpeg', $returnedFileInfo['mime']);
+    }
 }

@@ -67,6 +67,18 @@ class File
         ]);
     }
 
+    public function isRaster(): bool
+    {
+        return in_array($this->mimeType(), [
+            'image/avif',
+            'image/webp',
+            'image/jpeg',
+            'image/png',
+            'image/gif',
+            'image/bmp',
+        ]);
+    }
+
     public function conversionSupported(string $format): bool
     {
         return in_array($format, [
@@ -74,6 +86,7 @@ class File
             'webp',
             'jpeg',
             'png',
+            'auto',
         ]);
     }
 
