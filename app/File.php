@@ -81,13 +81,13 @@ class File
 
     public function conversionSupported(string $format): bool
     {
-        return in_array($format, [
-            'avif',
+        $avif = function_exists('imageavif') ? ['avif'] : [];
+        return in_array($format, array_merge($avif, [
             'webp',
             'jpeg',
             'png',
             'auto',
-        ]);
+        ]));
     }
 
     public function size(): int
