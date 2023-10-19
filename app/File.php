@@ -82,6 +82,7 @@ class File
     public function conversionSupported(string $format): bool
     {
         $avif = function_exists('imageavif') ? ['avif'] : [];
+
         return in_array($format, array_merge($avif, [
             'webp',
             'jpeg',

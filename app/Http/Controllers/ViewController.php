@@ -168,6 +168,7 @@ class ViewController extends BaseController
     private function formatsPriority(): array
     {
         $avif = function_exists('imageavif') ? ['image/avif'] : [];
+
         return array_merge($avif, [
             'image/webp',
             'image/png',
