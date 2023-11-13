@@ -85,6 +85,15 @@ class File
             'webp',
             'jpeg',
             'png',
+        ]);
+    }
+
+    public function supportedFormat(string $format): bool
+    {
+        return in_array($format, [
+            'webp',
+            'jpeg',
+            'png',
             'auto',
         ]);
     }
