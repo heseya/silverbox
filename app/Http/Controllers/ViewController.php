@@ -71,10 +71,11 @@ class ViewController extends BaseController
 
     private function prepareExtension(Request $request, File $file, string $fileName): string
     {
-        if ($request->has('format') && $file->conversionSupported($request->input('format'))) {
-            return match ($request->input('format')) {
+        $format = strtolower($request->input('format'));
+        if ($format && $file->supportedFormat($format)) {
+            return match (strtolower($format)) {
                 'auto' => $this->autoExtension($request, $file, $fileName),
-                default => $request->input('format'),
+                default => $file->conversionSupported($format) ? $format : pathinfo($fileName, PATHINFO_EXTENSION),
             };
         }
 
