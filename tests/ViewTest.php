@@ -47,8 +47,8 @@ class ViewTest extends TestCase
 
     public function testVideoAsPartialContent(): void
     {
+        $response = $this->send('GET', '/test/' . $this->fileVideo->name, [], ['Range' => 'bytes=0-999']);
         ob_start();
-        $response = $this->send('GET', '/test/' . $this->fileVideo->name);
         $this->assertEquals(file_get_contents(__DIR__ . '/files/video.mp4'), $response->streamedContent());
 
         $this->assertResponseStatus(206);
